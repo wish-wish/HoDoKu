@@ -22,11 +22,11 @@ package solver;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import smain.Candidate;
-import smain.SolutionStep;
-import smain.SolutionType;
-import smain.Sudoku2;
-import smain.SudokuSet;
+import sudoku.Candidate;
+import sudoku.SolutionStep;
+import sudoku.SolutionType;
+import sudoku.Sudoku2;
+import sudoku.SudokuSet;
 
 /**
  *

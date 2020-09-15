@@ -23,13 +23,13 @@ import java.awt.EventQueue;
 import java.util.List;
 import solver.SudokuSolver;
 import solver.SudokuSolverFactory;
-import smain.ClipboardMode;
-import smain.DifficultyLevel;
-import smain.GameMode;
-import sudoku.GenerateSudokuProgressDialog;
-import smain.Options;
-import smain.SolutionStep;
-import smain.Sudoku2;
+import sudoku.ClipboardMode;
+import sudoku.DifficultyLevel;
+import sudoku.GameMode;
+import sudoku.Options;
+import sudoku.SolutionStep;
+import sudoku.Sudoku2;
+import form.GenerateSudokuProgressDialog;
 
 /**
  * A BackgroundGenerator generates sudokus with a given {@link DifficultyLevel} 

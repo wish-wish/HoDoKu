@@ -20,9 +20,9 @@ package solver;
 
 import java.util.ArrayList;
 import java.util.List;
-import smain.SolutionStep;
-import smain.Sudoku2;
-import smain.SudokuSet;
+import sudoku.SolutionStep;
+import sudoku.Sudoku2;
+import sudoku.SudokuSet;
 
 /**
  * A class for finding and storing Group Nodes: A group node consists of

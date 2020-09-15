@@ -24,14 +24,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import smain.Candidate;
-import smain.ClipboardMode;
-import smain.Options;
-import smain.SolutionStep;
-import smain.SolutionType;
-import smain.Sudoku2;
-import smain.SudokuSet;
-import smain.SudokuStatus;
+import sudoku.Candidate;
+import sudoku.ClipboardMode;
+import sudoku.Options;
+import sudoku.SolutionStep;
+import sudoku.SolutionType;
+import sudoku.Sudoku2;
+import sudoku.SudokuSet;
+import sudoku.SudokuStatus;
 
 /**
  *

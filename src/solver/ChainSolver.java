@@ -27,14 +27,14 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import smain.Candidate;
-import smain.Chain;
-import smain.Options;
-import smain.SolutionStep;
-import smain.SolutionType;
-import smain.Sudoku2;
-import smain.SudokuSet;
-import smain.SudokuSetBase;
+import sudoku.Candidate;
+import sudoku.Chain;
+import sudoku.Options;
+import sudoku.SolutionStep;
+import sudoku.SolutionType;
+import sudoku.Sudoku2;
+import sudoku.SudokuSet;
+import sudoku.SudokuSetBase;
 
 /**
  * Searches for simple chains: Remote Pairs, Turbot Fish, X-Chain and XY-Chain.

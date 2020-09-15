@@ -26,19 +26,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import smain.DifficultyLevel;
-import smain.DifficultyType;
-import sudoku.FindAllStepsProgressDialog;
-import smain.GameMode;
+import sudoku.DifficultyLevel;
+import sudoku.DifficultyType;
+import sudoku.GameMode;
 import sudoku.GuiState;
-import smain.Options;
-import smain.SolutionCategory;
-import smain.SolutionStep;
-import smain.SolutionType;
-import sudoku.SolverProgressDialog;
-import smain.StepConfig;
-import smain.Sudoku2;
-import smain.SudokuUtil;
+import sudoku.Options;
+import sudoku.SolutionCategory;
+import sudoku.SolutionStep;
+import sudoku.SolutionType;
+import sudoku.StepConfig;
+import sudoku.Sudoku2;
+import sudoku.SudokuUtil;
+import form.FindAllStepsProgressDialog;
+import form.SolverProgressDialog;
 
 /**
  *

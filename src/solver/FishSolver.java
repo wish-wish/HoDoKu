@@ -27,16 +27,16 @@ import java.util.Collections;
 import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
-import smain.Candidate;
-import smain.Chain;
-import sudoku.FindAllStepsProgressDialog;
-import smain.Options;
-import smain.SolutionStep;
-import smain.SolutionType;
-import smain.Sudoku2;
-import smain.SudokuSet;
-import smain.SudokuSetBase;
-import smain.SudokuUtil;
+import sudoku.Candidate;
+import sudoku.Chain;
+import sudoku.Options;
+import sudoku.SolutionStep;
+import sudoku.SolutionType;
+import sudoku.Sudoku2;
+import sudoku.SudokuSet;
+import sudoku.SudokuSetBase;
+import sudoku.SudokuUtil;
+import form.FindAllStepsProgressDialog;
 
 /**
  * Es gelten die Definitionen aus dem Ultimate Fish Guide: http://www.sudoku.com/boards/viewtopic.php?t=4993

@@ -21,11 +21,11 @@ package generator;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import smain.DifficultyLevel;
-import smain.DifficultyType;
-import smain.GameMode;
-import smain.Options;
-import smain.StepConfig;
+import sudoku.DifficultyLevel;
+import sudoku.DifficultyType;
+import sudoku.GameMode;
+import sudoku.Options;
+import sudoku.StepConfig;
 
 /**
  * One instance of this class is used to control the background creation

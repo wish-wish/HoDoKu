@@ -19,7 +19,7 @@
 package generator;
 
 import java.util.Arrays;
-import smain.Sudoku2;
+import sudoku.Sudoku2;
 
 /**
  * A pattern, that indicates, which cells should contain givens
