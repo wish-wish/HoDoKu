@@ -23,12 +23,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import sudoku.FindAllStepsProgressDialog;
-import sudoku.SolutionStep;
-import sudoku.SolutionType;
-import sudoku.StepConfig;
-import sudoku.Sudoku2;
-import sudoku.SudokuSet;
-import sudoku.SudokuSetBase;
+import smain.SolutionStep;
+import smain.SolutionType;
+import smain.StepConfig;
+import smain.Sudoku2;
+import smain.SudokuSet;
+import smain.SudokuSetBase;
 
 /**
  * This class has two purposes:

@@ -19,6 +19,8 @@
 
 package sudoku;
 
+import smain.StepConfig;
+import smain.Options;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;

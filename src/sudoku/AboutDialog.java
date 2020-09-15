@@ -24,7 +24,7 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JComponent;
 import javax.swing.KeyStroke;
-
+        
 /**
  *
  * @author  hobiwan

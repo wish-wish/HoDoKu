@@ -18,6 +18,7 @@
  */
 package sudoku;
 
+import smain.Options;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;

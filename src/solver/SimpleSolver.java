@@ -23,12 +23,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import sudoku.Candidate;
-import sudoku.SolutionStep;
-import sudoku.SolutionType;
-import sudoku.Sudoku2;
-import sudoku.SudokuSinglesQueue;
-import sudoku.SudokuUtil;
+import smain.Candidate;
+import smain.SolutionStep;
+import smain.SolutionType;
+import smain.Sudoku2;
+import smain.SudokuSinglesQueue;
+import smain.SudokuUtil;
 
 /**
  *

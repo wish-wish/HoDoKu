@@ -19,6 +19,9 @@
 
 package sudoku;
 
+import smain.FindAllSteps;
+import smain.Sudoku2;
+import smain.SolutionStep;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;

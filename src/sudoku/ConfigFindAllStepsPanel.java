@@ -18,6 +18,10 @@
  */
 package sudoku;
 
+import smain.SolutionType;
+import smain.SolutionCategory;
+import smain.StepConfig;
+import smain.Options;
 import java.util.Enumeration;
 import javax.swing.JLabel;
 import javax.swing.tree.DefaultTreeModel;

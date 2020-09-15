@@ -19,6 +19,11 @@
 
 package sudoku;
 
+import smain.DifficultyLevel;
+import smain.Options;
+import smain.DifficultyType;
+import smain.SolutionType;
+import smain.StepConfig;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Component;

@@ -18,6 +18,8 @@
  */
 package sudoku;
 
+import smain.ColorKuImage;
+import smain.Options;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;

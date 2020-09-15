@@ -18,6 +18,7 @@
  */
 package sudoku;
 
+import smain.Options;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;

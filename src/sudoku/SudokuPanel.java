@@ -18,6 +18,22 @@
  */
 package sudoku;
 
+import smain.SudokuSetBase;
+import smain.SolutionType;
+import smain.ProgressChecker;
+import smain.Options;
+import smain.Sudoku2;
+import smain.SudokuStatus;
+import smain.SudokuUtil;
+import smain.SudokuSet;
+import smain.SolutionStep;
+import smain.ColorKuImage;
+import smain.GameMode;
+import smain.ClipboardMode;
+import smain.DifficultyType;
+import smain.Candidate;
+import smain.Chain;
+import smain.AlsInSolutionStep;
 import generator.SudokuGenerator;
 import generator.SudokuGeneratorFactory;
 import java.awt.BasicStroke;

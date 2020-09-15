@@ -23,11 +23,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import sudoku.Candidate;
-import sudoku.SolutionStep;
-import sudoku.SolutionType;
-import sudoku.Sudoku2;
-import sudoku.SudokuSet;
+import smain.Candidate;
+import smain.SolutionStep;
+import smain.SolutionType;
+import smain.Sudoku2;
+import smain.SudokuSet;
 
 /**
  * Verboten sind alle Templates, die keine 1 an einer der bereits gesetzten Positionen haben:

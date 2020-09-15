@@ -18,6 +18,7 @@
  */
 package sudoku;
 
+import smain.Options;
 import generator.GeneratorPattern;
 import generator.SudokuGeneratorFactory;
 import java.awt.Color;

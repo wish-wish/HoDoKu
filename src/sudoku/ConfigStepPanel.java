@@ -19,6 +19,8 @@
 
 package sudoku;
 
+import smain.Options;
+
 /**
  *
  * @author  hobiwan

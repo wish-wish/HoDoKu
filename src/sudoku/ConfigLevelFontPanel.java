@@ -18,6 +18,8 @@
  */
 package sudoku;
 
+import smain.Options;
+import smain.DifficultyLevel;
 import generator.BackgroundGeneratorThread;
 import java.awt.Color;
 import java.awt.Component;

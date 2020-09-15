@@ -18,6 +18,10 @@
  */
 package sudoku;
 
+import smain.SolutionStep;
+import smain.Sudoku2;
+import smain.Options;
+import smain.Candidate;
 import java.awt.FontMetrics;
 import java.util.ArrayList;
 import java.util.Collections;

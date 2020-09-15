@@ -27,14 +27,14 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import sudoku.Candidate;
-import sudoku.Chain;
-import sudoku.Options;
-import sudoku.SolutionStep;
-import sudoku.SolutionType;
-import sudoku.Sudoku2;
-import sudoku.SudokuSet;
-import sudoku.SudokuSetBase;
+import smain.Candidate;
+import smain.Chain;
+import smain.Options;
+import smain.SolutionStep;
+import smain.SolutionType;
+import smain.Sudoku2;
+import smain.SudokuSet;
+import smain.SudokuSetBase;
 
 /**
  * Implements Trebors Tables for finding Nice Loops, AICs, Forcing Chains and

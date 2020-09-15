@@ -22,9 +22,9 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import sudoku.Chain;
-import sudoku.Options;
-import sudoku.SudokuSet;
+import smain.Chain;
+import smain.Options;
+import smain.SudokuSet;
 
 /**
  * The format of an entry is described in class {@link Chain}.<br><br>

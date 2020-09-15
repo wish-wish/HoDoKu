@@ -19,6 +19,8 @@
 
 package sudoku;
 
+import smain.Options;
+import smain.StepConfig;
 import generator.BackgroundGeneratorThread;
 import java.awt.Color;
 import java.awt.Component;

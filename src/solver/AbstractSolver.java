@@ -39,9 +39,9 @@
 
 package solver;
 
-import sudoku.SolutionStep;
-import sudoku.SolutionType;
-import sudoku.Sudoku2;
+import smain.SolutionStep;
+import smain.SolutionType;
+import smain.Sudoku2;
 
 /**
  *

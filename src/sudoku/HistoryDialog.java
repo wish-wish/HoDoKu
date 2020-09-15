@@ -18,6 +18,8 @@
  */
 package sudoku;
 
+import smain.DifficultyLevel;
+import smain.Options;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;

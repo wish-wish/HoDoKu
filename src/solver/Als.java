@@ -18,9 +18,9 @@
  */
 package solver;
 
-import sudoku.SolutionStep;
-import sudoku.Sudoku2;
-import sudoku.SudokuSet;
+import smain.SolutionStep;
+import smain.Sudoku2;
+import smain.SudokuSet;
 
 /**
  * An ALS is a number cells, that together contain one candidate more than the

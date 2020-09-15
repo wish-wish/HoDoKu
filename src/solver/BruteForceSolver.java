@@ -20,10 +20,10 @@
 package solver;
 
 import generator.SudokuGeneratorFactory;
-import sudoku.SolutionStep;
-import sudoku.SolutionType;
-import sudoku.Sudoku2;
-import sudoku.SudokuSet;
+import smain.SolutionStep;
+import smain.SolutionType;
+import smain.Sudoku2;
+import smain.SudokuSet;
 
 /**
  *

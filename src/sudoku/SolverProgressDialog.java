@@ -19,6 +19,8 @@
 
 package sudoku;
 
+import smain.DifficultyType;
+import smain.Options;
 import java.awt.EventQueue;
 import solver.SudokuSolver;
 

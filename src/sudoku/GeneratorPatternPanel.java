@@ -19,6 +19,7 @@
 
 package sudoku;
 
+import smain.Sudoku2;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;

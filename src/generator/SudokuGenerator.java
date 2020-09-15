@@ -27,10 +27,10 @@ import java.util.Arrays;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import sudoku.Options;
-import sudoku.Sudoku2;
-import sudoku.SudokuSinglesQueue;
-import sudoku.SudokuStatus;
+import smain.Options;
+import smain.Sudoku2;
+import smain.SudokuSinglesQueue;
+import smain.SudokuStatus;
 
 /**
  * Bit based backtracking solver.

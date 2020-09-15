@@ -19,6 +19,12 @@
 
 package sudoku;
 
+import smain.SolutionType;
+import smain.ClipboardMode;
+import smain.SolutionStep;
+import smain.Options;
+import smain.Sudoku2;
+import smain.DifficultyType;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;

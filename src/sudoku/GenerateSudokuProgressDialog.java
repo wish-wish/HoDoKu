@@ -19,6 +19,11 @@
 
 package sudoku;
 
+import smain.DifficultyLevel;
+import smain.Sudoku2;
+import smain.Options;
+import smain.DifficultyType;
+import smain.GameMode;
 import generator.BackgroundGenerator;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;

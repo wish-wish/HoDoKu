@@ -19,8 +19,8 @@
 
 package solver;
 
-import sudoku.SolutionStep;
-import sudoku.SolutionType;
+import smain.SolutionStep;
+import smain.SolutionType;
 
 /**
  *
@@ -55,5 +55,5 @@ public class GiveUpSolver extends AbstractSolver {
         }
         return handled;
     }
-    
+
 }

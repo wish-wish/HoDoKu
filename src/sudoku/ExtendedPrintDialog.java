@@ -19,6 +19,9 @@
 
 package sudoku;
 
+import smain.SudokuUtil;
+import smain.DifficultyType;
+import smain.Options;
 import java.awt.Component;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;

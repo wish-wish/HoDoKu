@@ -19,6 +19,14 @@
 
 package sudoku;
 
+import smain.ClipboardMode;
+import smain.Options;
+import smain.DifficultyType;
+import smain.SudokuUtil;
+import smain.DifficultyLevel;
+import smain.Sudoku2;
+import smain.GameMode;
+import smain.SolutionStep;
 import generator.BackgroundGeneratorThread;
 import java.awt.Color;
 import java.awt.EventQueue;

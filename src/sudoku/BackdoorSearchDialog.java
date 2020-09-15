@@ -18,6 +18,12 @@
  */
 package sudoku;
 
+import smain.Options;
+import smain.SolutionStep;
+import smain.SudokuUtil;
+import smain.Sudoku2;
+import smain.StepConfig;
+import smain.Candidate;
 import java.awt.EventQueue;
 import java.util.ArrayList;
 import java.util.List;
