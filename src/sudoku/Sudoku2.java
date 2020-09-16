@@ -24,10 +24,13 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.FileOutputStream;
 import java.util.Arrays;
+import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import solver.SudokuSolver;
+import solver.SudokuSolverFactory;
 
 /**
  *
@@ -1156,6 +1159,7 @@ public class Sudoku2 implements Cloneable {
     public String getSudoku(ClipboardMode mode, SolutionStep step) {
         String dot = Options.getInstance().isUseZeroInsteadOfDot() ? "0" : ".";
         StringBuilder out = new StringBuilder();
+        StringBuilder out2 = new StringBuilder();
         if (mode == ClipboardMode.LIBRARY) {
             if (step == null) {
                 out.append(":0000:x:");
@@ -1200,6 +1204,60 @@ public class Sudoku2 implements Cloneable {
                     out.append(Integer.toString(getValue(i)));
                 }
             }
+        }
+        if(mode == ClipboardMode.STEPS)
+        {
+            SudokuSolver solver=SudokuSolverFactory.getDefaultSolverInstance();
+            List<SolutionStep> steps=solver.getSteps();
+            for(int i=0;i<steps.size();i++)
+            {
+                SolutionStep sp=steps.get(i);
+                String str=sp.toString_exp(2);
+                String[] as=str.split("=>");
+                if(as.length==1)
+                {
+                    as=str.split(":");                    
+                }
+                out2.append(as[as.length-1].trim()+",");
+                out.append(str+"\r\n");
+            }
+            //out.append(out2.toString());
+        }
+        if(mode==ClipboardMode.STEP_SHORT)
+        {
+            SudokuSolver solver=SudokuSolverFactory.getDefaultSolverInstance();
+            List<SolutionStep> steps=solver.getSteps();
+            for(int i=0;i<steps.size();i++)
+            {
+                SolutionStep sp=steps.get(i);
+                String str=sp.toString_exp(2);
+                String[] as=str.split("=>");
+                if(as.length==1)
+                {
+                    as=str.split(":");                    
+                }
+                out2.append(as[as.length-1].trim()+";");
+            }
+            out.append(out2.toString().replaceAll(" ",""));
+        }
+        if(mode==ClipboardMode.STEP_SHORT_SHORT)
+        {
+            SudokuSolver solver=SudokuSolverFactory.getDefaultSolverInstance();
+            List<SolutionStep> steps=solver.getSteps();
+            for(int i=0;i<steps.size();i++)
+            {
+                SolutionStep sp=steps.get(i);
+                String str=sp.toString_exp(2);
+                String[] as=str.split("=>");
+                if(as.length==1)
+                {
+                    as=str.split(":");                    
+                }
+                out2.append(as[as.length-1].trim()+"$");
+            }
+            String ss=out2.toString().replaceAll(" ","");
+            String sss=SolutionStep.convertToShort(ss);
+            out.append(sss);
         }
         if (mode == ClipboardMode.PM_GRID || mode == ClipboardMode.PM_GRID_WITH_STEP
                 || mode == ClipboardMode.CLUES_ONLY_FORMATTED || mode == ClipboardMode.VALUES_ONLY_FORMATTED) {

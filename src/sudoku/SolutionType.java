@@ -523,6 +523,10 @@ public enum SolutionType {
     public String getStepName() {
         return stepName;
     }
+    
+    public String getStepCode() {
+        return libraryType+","+argName+":";
+    }
 
     public void setStepName(String stepName) {
         this.stepName = stepName;

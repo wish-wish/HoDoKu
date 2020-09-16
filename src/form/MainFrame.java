@@ -590,6 +590,10 @@ public class MainFrame extends javax.swing.JFrame implements FlavorListener {
         resetSpielMenuItem = new javax.swing.JMenuItem();
         jSeparator33 = new javax.swing.JPopupMenu.Separator();
         configMenuItem = new javax.swing.JMenuItem();
+        jSeparator3 = new javax.swing.JPopupMenu.Separator();
+        copyStepsMenuItem = new javax.swing.JMenuItem();
+        copyStepsMenuItem1 = new javax.swing.JMenuItem();
+        copyStepsMenuItem2 = new javax.swing.JMenuItem();
         modeMenu = new javax.swing.JMenu();
         playingMenuItem = new javax.swing.JRadioButtonMenuItem();
         learningMenuItem = new javax.swing.JRadioButtonMenuItem();
@@ -610,7 +614,6 @@ public class MainFrame extends javax.swing.JFrame implements FlavorListener {
         levelSchwerMenuItem = new javax.swing.JRadioButtonMenuItem();
         levelExtremMenuItem = new javax.swing.JRadioButtonMenuItem();
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
-        jMenuItem1 = new javax.swing.JMenuItem();
         raetselMenu = new javax.swing.JMenu();
         vageHintMenuItem = new javax.swing.JMenuItem();
         mediumHintMenuItem = new javax.swing.JMenuItem();
@@ -1392,6 +1395,34 @@ public class MainFrame extends javax.swing.JFrame implements FlavorListener {
             }
         });
         bearbeitenMenu.add(configMenuItem);
+        bearbeitenMenu.add(jSeparator3);
+
+        copyStepsMenuItem.setText(bundle.getString("MainFrame.copyStepsMenuItem.text")); // NOI18N
+        copyStepsMenuItem.setToolTipText(bundle.getString("MainFrame.copyStepsMenuItem.toolTipText")); // NOI18N
+        copyStepsMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                copyStepsMenuItemActionPerformed(evt);
+            }
+        });
+        bearbeitenMenu.add(copyStepsMenuItem);
+
+        copyStepsMenuItem1.setText(bundle.getString("MainFrame.copyStepsMenuItem1.text")); // NOI18N
+        copyStepsMenuItem1.setToolTipText(bundle.getString("MainFrame.copyStepsMenuItem1.toolTipText")); // NOI18N
+        copyStepsMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                copyStepsMenuItem1ActionPerformed(evt);
+            }
+        });
+        bearbeitenMenu.add(copyStepsMenuItem1);
+
+        copyStepsMenuItem2.setText(bundle.getString("MainFrame.copyStepsMenuItem2.text")); // NOI18N
+        copyStepsMenuItem2.setToolTipText(bundle.getString("MainFrame.copyStepsMenuItem2.toolTipText")); // NOI18N
+        copyStepsMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                copyStepsMenuItem2ActionPerformed(evt);
+            }
+        });
+        bearbeitenMenu.add(copyStepsMenuItem2);
 
         jMenuBar1.add(bearbeitenMenu);
 
@@ -1546,14 +1577,6 @@ public class MainFrame extends javax.swing.JFrame implements FlavorListener {
 
         optionenMenu.add(levelMenu);
         optionenMenu.add(jSeparator2);
-
-        jMenuItem1.setText(bundle.getString("MainFrame.jMenuItem1.text")); // NOI18N
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
-            }
-        });
-        optionenMenu.add(jMenuItem1);
 
         jMenuBar1.add(optionenMenu);
 
@@ -2636,9 +2659,20 @@ private void extendedPrintMenuItemActionPerformed(java.awt.event.ActionEvent evt
         MyBrowserLauncher.getInstance().launchTracker();
     }//GEN-LAST:event_reportErrorMenuItemActionPerformed
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        //TODO:
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    private void copyStepsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_copyStepsMenuItemActionPerformed
+        SolutionStep activeStep = sudokuPanel.getStep();     
+        if(activeStep!=null)
+            System.out.print(activeStep.toString());
+        copyToClipboard(ClipboardMode.STEPS, false);
+    }//GEN-LAST:event_copyStepsMenuItemActionPerformed
+
+    private void copyStepsMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_copyStepsMenuItem1ActionPerformed
+        copyToClipboard(ClipboardMode.STEP_SHORT, false);
+    }//GEN-LAST:event_copyStepsMenuItem1ActionPerformed
+
+    private void copyStepsMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_copyStepsMenuItem2ActionPerformed
+        copyToClipboard(ClipboardMode.STEP_SHORT_SHORT,false);
+    }//GEN-LAST:event_copyStepsMenuItem2ActionPerformed
 
     /**
      * Adjusts icons for hint toggle buttons according to the mode (normal/ColorKu) and according
@@ -4070,6 +4104,9 @@ private void extendedPrintMenuItemActionPerformed(java.awt.event.ActionEvent evt
     private javax.swing.JMenuItem copyPmGridMenuItem;
     private javax.swing.JMenuItem copyPmGridWithStepMenuItem;
     private javax.swing.JMenuItem copySSMenuItem;
+    private javax.swing.JMenuItem copyStepsMenuItem;
+    private javax.swing.JMenuItem copyStepsMenuItem1;
+    private javax.swing.JMenuItem copyStepsMenuItem2;
     private javax.swing.JMenuItem createSavePointMenuItem;
     private javax.swing.JMenu dateiMenu;
     private javax.swing.JMenuItem druckenMenuItem;
@@ -4092,7 +4129,6 @@ private void extendedPrintMenuItemActionPerformed(java.awt.event.ActionEvent evt
     private javax.swing.JTextArea hinweisTextArea;
     private javax.swing.JMenuItem historyMenuItem;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
@@ -4108,6 +4144,7 @@ private void extendedPrintMenuItemActionPerformed(java.awt.event.ActionEvent evt
     private javax.swing.JPopupMenu.Separator jSeparator27;
     private javax.swing.JPopupMenu.Separator jSeparator28;
     private javax.swing.JPopupMenu.Separator jSeparator29;
+    private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JPopupMenu.Separator jSeparator30;
     private javax.swing.JPopupMenu.Separator jSeparator31;
     private javax.swing.JPopupMenu.Separator jSeparator32;

@@ -466,7 +466,7 @@ public class SolutionStep implements Comparable<SolutionStep>, Cloneable, Serial
         }
     }
     
-    public static String getCellStr(int index)
+    public static String getCellShortStr(int index)
     {
         String idx1 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         String idx2 ="123456789abcdefghijklmnop";
@@ -478,6 +478,56 @@ public class SolutionStep implements Comparable<SolutionStep>, Cloneable, Serial
         return cells;
     }
     
+    public static String convertToShort(String cellStr)
+    {
+        String idx1 = "@ABCDEFGHIJKLMNOPQRSTUVWXYZ#";
+        String idx2 ="$123456789abcdefghijklmnop&";
+        String shortCellStr="";
+        for(int i=0;i<cellStr.length();i++)
+        {
+            if(cellStr.charAt(i)=='r')
+            {
+                int count=CountNumStr(cellStr,i+1);
+                for(int j=0;j<count;j++)
+                {
+                    int n=cellStr.charAt(i+j+1)-48;
+                    shortCellStr+=idx1.charAt(n);
+                }
+                i+=count;
+            }
+            else if(cellStr.charAt(i)=='c')
+            {
+                int count=CountNumStr(cellStr,i+1);
+                for(int j=0;j<count;j++)
+                {
+                    int n=cellStr.charAt(i+j+1)-48;
+                    shortCellStr+=idx2.charAt(n);                    
+                }
+                i+=count;
+            }else
+            {
+                shortCellStr+=cellStr.charAt(i);
+            }
+        }                
+        return shortCellStr;
+    }
+    
+    public static int CountNumStr(String cellStr,int idx)
+    {
+        int count=0;
+        for(int i=idx;i<cellStr.length();i++)
+        {
+            if(cellStr.charAt(i)>48&&cellStr.charAt(i)<58)
+            {
+                count++;                
+            }else
+            {
+                break;
+            }
+        }
+        return count;
+    }
+        
 
     public static String getCompactCellPrint(int index1, int index2, int index3) {
         TreeSet<Integer> tmpSet = new TreeSet<Integer>();
@@ -671,6 +721,11 @@ public class SolutionStep implements Comparable<SolutionStep>, Cloneable, Serial
     public String getStepName() {
         return type.getStepName();
     }
+    
+    public String getStepCode()
+    {
+        return type.getStepCode();
+    }
 
     public static String getStepName(SolutionType type) {
         return type.getStepName();
@@ -741,7 +796,7 @@ public class SolutionStep implements Comparable<SolutionStep>, Cloneable, Serial
                     str += ": " + getCellPrint(index, false) + "=" + values.get(0);
                 } else if(art == 3)
                 {
-                    str=getCellStr(index)+values.get(0);
+                    str += getCellPrint(index, false) + "=" + values.get(0);
                 }
                 break;
             case HIDDEN_QUADRUPLE:
@@ -1292,6 +1347,621 @@ public class SolutionStep implements Comparable<SolutionStep>, Cloneable, Serial
                 tmp.append(getStepName());
                 if (art >= 1) {
                     tmp.append(": ").append(java.util.ResourceBundle.getBundle("intl/SolutionStep").getString("SolutionStep.dont_know"));
+                }
+                str = tmp.toString();
+                break;
+            default:
+                throw new RuntimeException(java.util.ResourceBundle.getBundle("intl/SolutionStep").getString("SolutionStep.invalid_type") + " (" + type + ")!");
+        }
+        return str;
+    }
+    
+    public String toString_exp(int art) {        
+        String str = "";
+        int index = 0;
+        StringBuffer tmp;
+        switch (type) {
+            case FULL_HOUSE:
+            case HIDDEN_SINGLE:
+            case NAKED_SINGLE:
+                index = indices.get(0);
+                str += getStepCode();
+                if(art==1)
+                {
+                    str += "" + values.get(0);
+                }else
+                {
+                    str+=getCellPrint(index, false) + "=" + values.get(0);
+                }                
+                break;
+            case HIDDEN_QUADRUPLE:
+            case NAKED_QUADRUPLE:
+            case HIDDEN_TRIPLE:
+            case NAKED_TRIPLE:
+            case LOCKED_TRIPLE:
+            case HIDDEN_PAIR:
+            case NAKED_PAIR:
+            case LOCKED_PAIR:
+                index = indices.get(0);
+                str = getStepCode();
+                tmp = new StringBuffer(str);
+                if (art >= 1) {
+                    //tmp.append(": ");
+                    if (type == SolutionType.HIDDEN_PAIR || type == SolutionType.NAKED_PAIR || type == SolutionType.LOCKED_PAIR) {
+                        tmp.append(values.get(0));
+                        tmp.append(",");
+                        tmp.append(values.get(1));
+                    } else if (type == SolutionType.HIDDEN_TRIPLE || type == SolutionType.NAKED_TRIPLE || type == SolutionType.LOCKED_TRIPLE) {
+                        tmp.append(values.get(0));
+                        tmp.append(",");
+                        tmp.append(values.get(1));
+                        tmp.append(",");
+                        tmp.append(values.get(2));
+                    } else if (type == SolutionType.HIDDEN_QUADRUPLE || type == SolutionType.NAKED_QUADRUPLE) {
+                        tmp.append(values.get(0));
+                        tmp.append(",");
+                        tmp.append(values.get(1));
+                        tmp.append(",");
+                        tmp.append(values.get(2));
+                        tmp.append(",");
+                        tmp.append(values.get(3));
+                    }
+                }
+                if (art >= 2) {
+                    tmp.append(" ");
+                    //tmp.append(java.util.ResourceBundle.getBundle("intl/SolutionStep").getString("SolutionStep.in"));                    
+                    //tmp.append(" ");
+                    tmp.append(" in ");
+                    tmp.append(getCompactCellPrint(indices));
+                    getCandidatesToDelete(tmp);
+                }
+                str = tmp.toString();
+                break;
+            case LOCKED_CANDIDATES:
+            case LOCKED_CANDIDATES_1:
+            case LOCKED_CANDIDATES_2:
+                str = getStepCode();
+                if (art >= 1) {
+                    str += ": " + values.get(0);
+                }
+                if (art >= 2) {
+                    str += 
+                            " "
+                            //+ java.util.ResourceBundle.getBundle("intl/SolutionStep").getString("SolutionStep.in")
+                            + "in "
+                            //+ " " 
+                            + getEntityShortName() + getEntityNumber();
+                    tmp = new StringBuffer(str);
+                    getCandidatesToDelete(tmp);
+                    str = tmp.toString();
+                }
+                break;
+            case SKYSCRAPER:
+            case TWO_STRING_KITE:
+            case DUAL_TWO_STRING_KITE:
+                str = getStepCode();
+                if (art >= 1) {
+                    str += "" + values.get(0);
+                }
+                if (art >= 2) {
+                    str += " " + 
+                            //java.util.ResourceBundle.getBundle("intl/SolutionStep").getString("SolutionStep.in") + " "+ 
+                            " in "+
+                            getCompactCellPrint(indices, 0, 1);
+                    if (type == SolutionType.DUAL_TWO_STRING_KITE) {
+                        str += "/" + 
+                                //java.util.ResourceBundle.getBundle("intl/SolutionStep").getString("SolutionStep.in") + " "+ 
+                                " in "+
+                                getCompactCellPrint(indices, 4, 5);
+                    }
+                    str += " ("
+                            //+ java.util.ResourceBundle.getBundle("intl/SolutionStep").getString("SolutionStep.connected_by") + " "
+                            +" cb "
+                            + getCompactCellPrint(indices, 2, 3) + ")";
+                    tmp = new StringBuffer(str);
+                    getCandidatesToDelete(tmp);
+                    str = tmp.toString();
+                }
+                break;
+            case EMPTY_RECTANGLE:
+            case DUAL_EMPTY_RECTANGLE:
+                str = getStepCode();
+                if (art >= 1) {
+                    str += "" + values.get(0);
+                }
+                if (art >= 2) {
+                    str += " " 
+                            //+ java.util.ResourceBundle.getBundle("intl/SolutionStep").getString("SolutionStep.in") + " "
+                            +"in "
+                            + getEntityShortName() + getEntityNumber()
+                            + " (" + getCompactCellPrint(indices, 0, 1);
+                    if (type == SolutionType.DUAL_EMPTY_RECTANGLE) {
+                        str += "/" + getCompactCellPrint(indices, 2, 3);
+                    }
+                    str += ")";
+                    tmp = new StringBuffer(str);
+                    getCandidatesToDelete(tmp);
+                    str = tmp.toString();
+                }
+                break;
+            case W_WING:
+                str = getStepCode();
+                if (art >= 1) {
+                    str += "" + values.get(0) + "/" + values.get(1);
+                }
+                if (art >= 2) {
+                    tmp = new StringBuffer(str);
+                    //tmp.append(" ");
+                    //tmp.append(java.util.ResourceBundle.getBundle("intl/SolutionStep").getString("SolutionStep.in"));
+                    tmp.append(" in");
+                    tmp.append(" ");
+                    tmp.append(getCompactCellPrint(indices, 0, 1));
+                    //tmp.append(" ");
+                    //tmp.append(java.util.ResourceBundle.getBundle("intl/SolutionStep").getString("SolutionStep.connected_by"));
+                    tmp.append(" cb");
+                    tmp.append(" ");
+                    tmp.append(values.get(1));
+                    //tmp.append(" ");
+                    //tmp.append(java.util.ResourceBundle.getBundle("intl/SolutionStep").getString("SolutionStep.in"));
+                    tmp.append(" in");
+                    tmp.append(" ");
+                    getFinSet(tmp, fins, false);
+                    getCandidatesToDelete(tmp);
+                    str = tmp.toString();
+                }
+                break;
+            case XY_WING:
+            case XYZ_WING:
+                str = getStepCode();
+                if (art >= 1) {
+                    str += "" + values.get(0) + "/" + values.get(1);
+                }
+                if (art >= 2) {
+                    str += "/" + values.get(2) 
+                            //+ " " + java.util.ResourceBundle.getBundle("intl/SolutionStep").getString("SolutionStep.in") 
+                            +" in"
+                            + " " + getCompactCellPrint(indices);
+                    tmp = new StringBuffer(str);
+                    getCandidatesToDelete(tmp);
+                    str = tmp.toString();
+                }
+                break;
+            case SIMPLE_COLORS:
+            case SIMPLE_COLORS_TRAP:
+            case SIMPLE_COLORS_WRAP:
+            case MULTI_COLORS:
+            case MULTI_COLORS_1:
+            case MULTI_COLORS_2:
+                str = getStepCode();
+                if (art >= 1) {
+                    str += "" + values.get(0);
+                }
+                if (art >= 2) {
+                    tmp = new StringBuffer(str);
+                    getColorCellPrint(tmp);
+                    getCandidatesToDelete(tmp);
+                    str = tmp.toString();
+                }
+                break;
+            case X_CHAIN:
+            case XY_CHAIN:
+            case REMOTE_PAIR:
+            case TURBOT_FISH:
+            case NICE_LOOP:
+            case CONTINUOUS_NICE_LOOP:
+            case DISCONTINUOUS_NICE_LOOP:
+            case GROUPED_NICE_LOOP:
+            case GROUPED_CONTINUOUS_NICE_LOOP:
+            case GROUPED_DISCONTINUOUS_NICE_LOOP:
+            case AIC:
+            case GROUPED_AIC:
+                str = getStepCode();
+                if (art >= 1) {
+                    if (type == SolutionType.REMOTE_PAIR) {
+                        str += "" + values.get(0) + "/" + values.get(1);
+                    } else {
+                        str += "" + getCandidatesToDeleteDigits();
+                    }
+//                    if (type == SolutionType.REMOTE_PAIR) {
+//                        str += ": " + values.get(0) + "/" + values.get(1);
+//                    } else if (type == SolutionType.X_CHAIN || type == SolutionType.XY_CHAIN) {
+//                    //} else if (type == SolutionType.X_CHAIN) {
+//                        //str += ": " + values.get(0);
+//                        str += ": " + candidatesToDelete.get(0).value;
+//                    }
+                }
+                if (art >= 2) {
+                    List<Chain> dummy1 = getChains();
+                    StringBuffer tmpChain = getChainString(getChains().get(0));
+                    // adjust nice loop notation
+                    if (type == SolutionType.CONTINUOUS_NICE_LOOP || type == SolutionType.GROUPED_CONTINUOUS_NICE_LOOP) {
+                        Chain ch = getChains().get(0);
+                        int start = ch.getStart();
+                        int cellIndex = ch.getCellIndex(start);
+                        while (ch.getCellIndex(start) == cellIndex) {
+                            start++;
+                        }
+                        int end = ch.getEnd();
+                        cellIndex = ch.getCellIndex(end);
+                        while (ch.getCellIndex(end) == cellIndex) {
+                            end--;
+                        }
+                        end++;
+                        tmpChain.insert(0, ch.getCandidate(end) + "= ");
+                        tmpChain.append(" =").append(ch.getCandidate(start));
+                        //System.out.println(Chain.toString(ch.chain[start]) + "/" + Chain.toString(ch.chain[ch.end]));
+                    }
+                    if (type == SolutionType.AIC || type == SolutionType.GROUPED_AIC || type == SolutionType.XY_CHAIN) {
+                        Chain ch = getChains().get(0);
+                        //System.out.println(Chain.toString(ch.chain[ch.start]) + "/" + Chain.toString(ch.chain[ch.end]));
+                        tmpChain.insert(0, ch.getCandidate(ch.getStart()) + "- ");
+                        tmpChain.append(" -").append(ch.getCandidate(ch.getEnd()));
+                    }
+                    //str += " " + getChainString(getChains().get(0));
+                    str += " " + tmpChain;
+                    tmp = new StringBuffer(str);
+                    getCandidatesToDelete(tmp);
+                    str = tmp.toString();
+                }
+                break;
+            case FORCING_CHAIN:
+            case FORCING_CHAIN_CONTRADICTION:
+            case FORCING_CHAIN_VERITY:
+            case FORCING_NET:
+            case FORCING_NET_CONTRADICTION:
+            case FORCING_NET_VERITY:
+                str = getStepCode();
+                if (art >= 1) {
+                    // Keine dezenten Hinweise bei Forcing Chains...
+                }
+                if (art >= 2) {
+                    if (type == SolutionType.FORCING_CHAIN_CONTRADICTION
+                            || type == SolutionType.FORCING_NET_CONTRADICTION) {
+                        str += " " 
+                                //+ java.util.ResourceBundle.getBundle("intl/SolutionStep").getString("SolutionStep.in") + " " 
+                                +"in "
+                                + getEntityShortNameNumber();
+                    } else {
+                        //str += " Verity";
+                    }
+                    if (indices.size() > 0) {
+                        str += " => " + getCellPrint(indices.get(0), false) + "=" + values.get(0);
+                    } else {
+                        tmp = new StringBuffer(str);
+                        getCandidatesToDelete(tmp);
+                        str = tmp.toString();
+                    }
+                    for (int i = 0; i < chains.size(); i++) {
+                        str += "fc  " + getForcingChainString(getChains().get(i));
+                    }
+                }
+                break;
+            case UNIQUENESS_1:
+            case UNIQUENESS_2:
+            case UNIQUENESS_3:
+            case UNIQUENESS_4:
+            case UNIQUENESS_5:
+            case UNIQUENESS_6:
+            case HIDDEN_RECTANGLE:
+            case AVOIDABLE_RECTANGLE_1:
+            case AVOIDABLE_RECTANGLE_2:
+                str = getStepCode();
+                if (art >= 1) {
+                    str += "" + values.get(0) + "/" + values.get(1);
+                }
+                if (art >= 2) {
+                    str += " in " + getCompactCellPrint(indices);
+                    tmp = new StringBuffer(str);
+                    getCandidatesToDelete(tmp);
+                    str = tmp.toString();
+                }
+                break;
+            case BUG_PLUS_1:
+                str = type.getLibraryType()+""+type.getArgName()+"";
+                if (art >= 2) {
+                    tmp = new StringBuffer(str);
+                    getCandidatesToDelete(tmp);
+                    str = tmp.toString();
+                }
+                break;
+            case X_WING:
+            case SWORDFISH:
+            case JELLYFISH:
+            case SQUIRMBAG:
+            case WHALE:
+            case LEVIATHAN:
+            case FINNED_X_WING:
+            case FINNED_SWORDFISH:
+            case FINNED_JELLYFISH:
+            case FINNED_SQUIRMBAG:
+            case FINNED_WHALE:
+            case FINNED_LEVIATHAN:
+            case SASHIMI_X_WING:
+            case SASHIMI_SWORDFISH:
+            case SASHIMI_JELLYFISH:
+            case SASHIMI_SQUIRMBAG:
+            case SASHIMI_WHALE:
+            case SASHIMI_LEVIATHAN:
+            case FRANKEN_X_WING:
+            case FRANKEN_SWORDFISH:
+            case FRANKEN_JELLYFISH:
+            case FRANKEN_SQUIRMBAG:
+            case FRANKEN_WHALE:
+            case FRANKEN_LEVIATHAN:
+            case FINNED_FRANKEN_X_WING:
+            case FINNED_FRANKEN_SWORDFISH:
+            case FINNED_FRANKEN_JELLYFISH:
+            case FINNED_FRANKEN_SQUIRMBAG:
+            case FINNED_FRANKEN_WHALE:
+            case FINNED_FRANKEN_LEVIATHAN:
+            case MUTANT_X_WING:
+            case MUTANT_SWORDFISH:
+            case MUTANT_JELLYFISH:
+            case MUTANT_SQUIRMBAG:
+            case MUTANT_WHALE:
+            case MUTANT_LEVIATHAN:
+            case FINNED_MUTANT_X_WING:
+            case FINNED_MUTANT_SWORDFISH:
+            case FINNED_MUTANT_JELLYFISH:
+            case FINNED_MUTANT_SQUIRMBAG:
+            case FINNED_MUTANT_WHALE:
+            case FINNED_MUTANT_LEVIATHAN:
+            case KRAKEN_FISH:
+            case KRAKEN_FISH_TYPE_1:
+            case KRAKEN_FISH_TYPE_2:
+                tmp = new StringBuffer();
+                if (isSiamese) {
+                    //tmp.append(java.util.ResourceBundle.getBundle("intl/SolutionStep").getString("SolutionStep.siamese")).append(" ");
+                    tmp.append(" ss ");
+                }
+                tmp.append(getStepCode());
+                if (art >= 1) {
+                    if (type.isKrakenFish()) {
+                        tmp.append(": ");
+                        getCandidatesToDelete(tmp);
+                        tmp.append(" ff ").append(subType.getStepCode());
+                    }
+                    tmp.append(": ").append(values.get(0));
+                }
+                if (art >= 2) {
+                    tmp.append(" ");
+                    getEntities(tmp, baseEntities, true, false);
+                    tmp.append(" ");
+                    getEntities(tmp, coverEntities, true, true);
+                    //tmp.append(" Positionen: ");
+                    int displayMode = Options.getInstance().getFishDisplayMode();
+                    if (type.isKrakenFish()) {
+                        // no statistics
+                        displayMode = 0;
+                    }
+                    switch (displayMode) {
+                        case 0:
+                            if (fins.size() > 0) {
+                                tmp.append(" ");
+                                getFins(tmp, false, true);
+                            }
+                            if (endoFins.size() > 0) {
+                                tmp.append(" ");
+                                getFins(tmp, true, true);
+                            }
+                            break;
+                        case 1:
+                            getFishStatistics(tmp, false);
+                            break;
+                        case 2:
+                            getFishStatistics(tmp, true);
+                            break;
+                    }
+                    if (!type.isKrakenFish()) {
+                        getCandidatesToDelete(tmp);
+                    }
+                }
+                if (type.isKrakenFish()) {
+                    for (int i = 0; i < chains.size(); i++) {
+                        tmp.append(" ff  ").append(getChainString(chains.get(i)));
+                    }
+                }
+                str = tmp.toString();
+                break;
+            case SUE_DE_COQ:
+                str = getStepCode();
+                tmp = new StringBuffer(str + "");
+                if (art >= 1) {
+                    getIndexValueSet(tmp);
+                    str = tmp.toString();
+                }
+                if (art >= 2) {
+                    tmp.append(" (");
+                    getFinSet(tmp, fins);
+                    tmp.append(", ");
+                    getFinSet(tmp, endoFins);
+                    tmp.append(")");
+                    getCandidatesToDelete(tmp);
+                    str = tmp.toString();
+                }
+                break;
+            case ALS_XZ:
+                // Sets A und B stecken in AlsInSolutionStep, X ist eine 2-Elemente lange Chain, alle Z stecken in fins
+                str = getStepCode();
+                tmp = new StringBuffer(str + "");
+                if (art >= 1) {
+                    tmp.append("A=");
+                    getAls(tmp, 0);
+                    str = tmp.toString();
+                }
+                if (art >= 2) {
+                    tmp.append(", B=");
+                    getAls(tmp, 1);
+                    tmp.append(", X=");
+                    getAlsXorZ(tmp, true);
+                    if (!fins.isEmpty()) {
+                        tmp.append(", Z=");
+                        getAlsXorZ(tmp, false);
+                    }
+                    getCandidatesToDelete(tmp);
+                    str = tmp.toString();
+                }
+                break;
+            case ALS_XY_WING:
+                // Sets A, B und C stecken in AlsInSolutionStep, alle Y und Z stecken in endoFins, alle X stecken in fins
+                str = getStepCode();
+                if (art == 1) {
+                    tmp = new StringBuffer(str + "");
+                    tmp.append("C=");
+                    getAls(tmp, 2);
+                    str = tmp.toString();
+                }
+                if (art >= 2) {
+                    tmp = new StringBuffer(str + "");
+                    tmp.append("A=");
+                    getAls(tmp, 0);
+                    tmp.append(", B=");
+                    getAls(tmp, 1);
+                    tmp.append(", C=");
+                    getAls(tmp, 2);
+                    tmp.append(", X,Y=");
+                    getAlsXorZ(tmp, true);
+                    tmp.append(", Z=");
+                    getAlsXorZ(tmp, false);
+                    getCandidatesToDelete(tmp);
+                    str = tmp.toString();
+                }
+                break;
+            case ALS_XY_CHAIN:
+                str = getStepCode();
+                if (restrictedCommons.isEmpty()) {
+                    // old code -> has to remain for correctly displaying saved files
+                    if (art == 1) {
+                        tmp = new StringBuffer(str + "");
+                        tmp.append(
+                                //java.util.ResourceBundle.getBundle("intl/SolutionStep").getString("SolutionStep.start")
+                                " st "
+                        ).append("=");
+                        getAls(tmp, 0);
+                        tmp.append(", ").append(
+                                //java.util.ResourceBundle.getBundle("intl/SolutionStep").getString("SolutionStep.end")
+                                " ed "
+                        ).append("=");
+                        getAls(tmp, alses.size() - 1);
+                        str = tmp.toString();
+                    }
+                    if (art >= 2) {
+                        tmp = new StringBuffer(str + "");
+                        char alsChar = 'A';
+                        boolean first = true;
+                        for (int i = 0; i < alses.size(); i++) {
+                            if (first) {
+                                first = false;
+                            } else {
+                                tmp.append(", ");
+                            }
+                            tmp.append(alsChar++);
+                            tmp.append("=");
+                            getAls(tmp, i);
+                        }
+                        tmp.append(", RCs=");
+                        getAlsXorZ(tmp, true);
+                        tmp.append(", X=");
+                        getAlsXorZ(tmp, false);
+                        getCandidatesToDelete(tmp);
+                        str = tmp.toString();
+                    }
+                } else {
+                    if (art == 1) {
+                        tmp = new StringBuffer(str + "");
+                        tmp.append(
+                                //java.util.ResourceBundle.getBundle("intl/SolutionStep").getString("SolutionStep.start")
+                                " st "
+                        ).append("=");
+                        getAls(tmp, 0);
+                        tmp.append(", ").append(
+                                //java.util.ResourceBundle.getBundle("intl/SolutionStep").getString("SolutionStep.end")
+                                " ed "
+                        ).append("=");
+                        getAls(tmp, alses.size() - 1);
+                        str = tmp.toString();
+                    }
+                    if (art >= 2) {
+                        tmp = new StringBuffer(str + "");
+                        getCandidatesToDeleteDigits(tmp);
+                        tmp.append("- ");
+                        for (int i = 0; i < alses.size(); i++) {
+                            getAls(tmp, i);
+                            if (i < restrictedCommons.size()) {
+                                getRestrictedCommon(restrictedCommons.get(i), tmp);
+                            }
+                        }
+                        tmp.append(" -");
+                        getCandidatesToDeleteDigits(tmp);
+                        getCandidatesToDelete(tmp);
+                        str = tmp.toString();
+                    }
+                }
+                break;
+            case DEATH_BLOSSOM:
+                str =  getStepCode();
+                tmp = new StringBuffer(str + "");
+                if (art >= 1) {
+                    tmp.append(getCellPrint(indices.get(0)));
+                    str = tmp.toString();
+                }
+                if (art >= 2) {
+                    for (int i = 0; i < alses.size(); i++) {
+                        tmp.append(", ");
+                        getRestrictedCommon(restrictedCommons.get(i), tmp);
+                        getAls(tmp, i);
+                    }
+                    getCandidatesToDelete(tmp);
+                    str = tmp.toString();
+                }
+                break;
+            case TEMPLATE_SET:
+                str =  getStepCode();
+                if (art == 1) {
+                    str += "" + values.get(0);
+                }
+                if (art >= 2) {
+                    tmp = new StringBuffer(str + "");
+                    tmp.append(getCompactCellPrint(indices)).append("=").append(values.get(0));
+                    str = tmp.toString();
+                }
+                break;
+            case TEMPLATE_DEL:
+                str =  getStepCode();
+                if (art >= 1) {
+                    // nichts zusätzlich ausgeben
+                }
+                if (art >= 2) {
+                    tmp = new StringBuffer(str + "");
+                    getCandidatesToDelete(tmp);
+                    str = tmp.toString();
+                }
+                break;
+            case BRUTE_FORCE:
+                str =  getStepCode();
+                if (art == 1) {
+                    str += "" + values.get(0);
+                }
+                if (art >= 2) {
+                    tmp = new StringBuffer(str + "");
+                    tmp.append(getCompactCellPrint(indices)).append("=").append(values.get(0));
+                    str = tmp.toString();
+                }
+                break;
+            case INCOMPLETE:
+                str = getStepCode();
+                str += 
+                        " ics ";
+                        //java.util.ResourceBundle.getBundle("intl/SolutionStep").getString("SolutionStep.incomplete_solution");
+                break;
+            case GIVE_UP:
+                tmp = new StringBuffer();
+                tmp.append(getStepCode());
+                if (art >= 1) {
+                    tmp.append(":").append(
+                            //java.util.ResourceBundle.getBundle("intl/SolutionStep").getString("SolutionStep.dont_know")
+                            " dk "
+                    );
                 }
                 str = tmp.toString();
                 break;
