@@ -21,6 +21,7 @@ package sudoku;
 import generator.BackgroundGeneratorThread;
 import generator.SudokuGenerator;
 import generator.SudokuGeneratorFactory;
+import generator.GeneratorUtil;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -118,16 +119,18 @@ public class Main {
 
     public void batchSolve(String fileName, String puzzleString, boolean printSolution, boolean printSolutionPath,
             boolean printStatistic,
-            ClipboardMode cMode, Set<SolutionType> types, String outFile, boolean findAllSteps) {
-        batchSolve(fileName, puzzleString, printSolution, printSolutionPath, printStatistic, cMode, types, outFile, findAllSteps, false, null);
+            ClipboardMode cMode, Set<SolutionType> types, String outFile, boolean findAllSteps,boolean printQs,boolean printQa) {
+        batchSolve(fileName, puzzleString, printSolution, printSolutionPath, printStatistic, cMode, types, outFile, findAllSteps, false, null,printQs,printQa);
     }
 
     @SuppressWarnings("CallToThreadDumpStack")
     public void batchSolve(String fileName, String puzzleString, boolean printSolution, boolean printSolutionPath,
             boolean printStatistic, ClipboardMode cMode, Set<SolutionType> types, String outFile, boolean findAllSteps,
-            boolean bruteForceTest, List<SolutionType> testTypes) {
+            boolean bruteForceTest, List<SolutionType> testTypes,boolean printQs,boolean printQa) {
         BatchSolveThread thread = new BatchSolveThread(fileName, puzzleString, printSolution, printSolutionPath, printStatistic,
                 cMode, types, outFile, findAllSteps, bruteForceTest, testTypes);
+        thread.printQS=printQs;
+        thread.printQA=printQa;
         thread.start();
         ShutDownThread st = new ShutDownThread(thread);
         Runtime.getRuntime().addShutdownHook(st);
@@ -547,7 +550,15 @@ public class Main {
                 } else {
                     // args without parameters (could be puzzle)
                     if (arg.charAt(0) == '/') {
-                        argMap.put(arg, null);
+                        if(options.size()>(i+1)&&options.get(i+1).trim().charAt(0)!='/')
+                        {
+                            argMap.put(arg,options.get(i+1));
+                            i++;
+                        }
+                        else
+                        {
+                            argMap.put(arg, null);
+                        }                        
                     } else {
                         // has to be puzzle
                         puzzleString = arg;
@@ -710,6 +721,24 @@ public class Main {
                 printStatistics = true;
                 argMap.remove("/vst");
             }
+            boolean printQs=false;
+            if(argMap.containsKey("/qs"))
+            {
+                printQs=true;
+                argMap.remove("/qs");
+            }
+            boolean printQa=false;
+            if(argMap.containsKey("/qa"))
+            {
+                printQa=true;
+                argMap.remove("/qa");
+            }
+            if(argMap.containsKey("/lang"))
+            {
+                String arg = argMap.get("/lang");
+                Options.getInstance().setLanguage(arg);
+                argMap.remove("/lang");
+            }
             if (argMap.containsKey("/vf")) {
                 String arg = argMap.get("/vf");
                 int fishFormat = 0;
@@ -777,7 +806,7 @@ public class Main {
                 printIgnoredOptions("/bs", argMap);
                 String fileName = argMap.get("/bs");
                 new Main().batchSolve(fileName, null, printSolution, printSolutionPath, printStatistics,
-                        clipboardMode, outTypes, outFile, false);
+                        clipboardMode, outTypes, outFile, false,printQs,printQa);
                 if (consoleFrame == null) {
                     System.exit(0);
                 }
@@ -787,7 +816,7 @@ public class Main {
                 printIgnoredOptions("/bsaf", argMap);
                 String fileName = argMap.get("/bsaf");
                 new Main().batchSolve(fileName, null, printSolution, printSolutionPath, printStatistics,
-                        clipboardMode, outTypes, outFile, true);
+                        clipboardMode, outTypes, outFile, true,printQs,printQa);
                 if (consoleFrame == null) {
                     System.exit(0);
                 }
@@ -804,7 +833,7 @@ public class Main {
                     return;
                 }
                 new Main().batchSolve(null, puzzleString, printSolution, printSolutionPath, printStatistics,
-                        clipboardMode, outTypes, outFile, true);
+                        clipboardMode, outTypes, outFile, true,printQs,printQa);
                 if (consoleFrame == null) {
                     System.exit(0);
                 }
@@ -838,7 +867,7 @@ public class Main {
                     return;
                 }
                 new Main().batchSolve(fileName, null, false, false, true,
-                        clipboardMode, outTypes, outFile, false, true, testTypes);
+                        clipboardMode, outTypes, outFile, false, true, testTypes,printQs,printQa);
                 if (consoleFrame == null) {
                     System.exit(0);
                 }
@@ -847,12 +876,12 @@ public class Main {
             if (puzzleString != null) {
                 printIgnoredOptions("", argMap);
                 new Main().batchSolve(null, puzzleString, printSolution, printSolutionPath, printStatistics,
-                        clipboardMode, outTypes, outFile, false);
+                        clipboardMode, outTypes, outFile, false,printQs,printQa);
                 if (consoleFrame == null) {
                     System.exit(0);
                 }
                 return;
-            }
+            }            
             printIgnoredOptions("", argMap);
             System.out.println("Don't know what to do...");
             printHelpScreen();
@@ -1026,6 +1055,8 @@ public class Main {
                 + "      0: easy; 1: medium; 2: hard; 3: unfair; 4: extreme\r\n"
                 + "  /bs <file>: batch solve puzzles in <file> (output written to <file>.out.txt\r\n"
                 + "       or a file given by /o)\r\n"
+                + "  /qs  for solution short batch process ss solution urp for /bs)\r\n"
+                + "  /lang <en|zh_CN|...>  to change the default language)\r\n"
                 + "  /bsaf <file>: batch process puzzles in <file> (output as in /bs);\r\n"
                 + "       for each puzzle \"Find all Steps\" is executed\r\n"
                 + "  /bsa: execute \"Find all Steps\" for [puzzle] (output written to\r\n"
@@ -1326,6 +1357,8 @@ class BatchSolveThread extends Thread {
     private boolean printSolution;
     private boolean printSolutionPath;
     private boolean printStatistic;
+    public boolean printQS=false;
+    public boolean printQA=false;
     private int[] results;
     private int bruteForceAnz;
     private int templateAnz;
@@ -1340,6 +1373,7 @@ class BatchSolveThread extends Thread {
     private String outFileName = null;
     private boolean findAllSteps = false;
     private boolean bruteForceTest = false;
+    private boolean isqs=false;
     private List<SolutionType> testTypes = null;
     private StepStatistic[] stepStatistics;
     private StepStatistic[] singleStepStatistics;
@@ -1584,8 +1618,8 @@ class BatchSolveThread extends Thread {
                     if (unsolved) {
                         unsolvedAnz++;
                     }
-                    // only for now: check the solution!
-                    for (int i = 0; i < sudoku.getValues().length; i++) {
+                    // only for now: check the solution!                    
+                    for (int i = 0; i < sudoku.getValues().length; i++) {                        
                         if (sudoku.getValue(i) != sudoku.getSolution(i)) {
                             System.out.println("Invalid solution: ");
                             System.out.println("   Sudoku: " + line);
@@ -1593,6 +1627,7 @@ class BatchSolveThread extends Thread {
                             System.out.println("   True Solution: " + Arrays.toString(sudoku.getSolution()));
                         }
                     }
+                    
 //                    System.out.println("solved!");
                 }
                 String guess = needsGuessing ? " " + SolutionType.BRUTE_FORCE.getArgName() : "";
@@ -1600,23 +1635,45 @@ class BatchSolveThread extends Thread {
                 String giveUp = givenUp ? " " + SolutionType.GIVE_UP.getArgName() : "";
                 if (printSolution || bruteForceTest) {
                     solvedSudoku = sudoku.clone();
+                    StringBuilder sb=new StringBuilder();
+                    for(int i=0;i<sudoku.getValues().length;i++)
+                    {
+                        sb.append(sudoku.getValue(i));
+                    }
                     if (sudoku.isSolved()) {
-                        line = sudoku.getSudoku(ClipboardMode.VALUES_ONLY);
+                        if(!printQS&&!printQA)
+                            line = sudoku.getSudoku(ClipboardMode.VALUES_ONLY);
+                        else if(printQS)
+                            line = sudoku.getSudoku(ClipboardMode.STEP_SS_ARG);
+                        else                            
+                            line = "q:"+sudoku.getSudoku(ClipboardMode.CLUES_ONLY)+"\r\na:"+sb.toString();
+                        
                     } else {
                         //System.out.println("Sudoku2: " + sudoku.getSudoku(ClipboardMode.PM_GRID));
                         //System.out.println("SolvedSudoku: " + solvedSudoku.getSudoku(ClipboardMode.PM_GRID));
                         generator.validSolution(solvedSudoku);
                         //System.out.println("SolvedSudoku2: " + solvedSudoku.getSudoku(ClipboardMode.PM_GRID));
-                        line = solvedSudoku.getSudoku(ClipboardMode.VALUES_ONLY);
+                        if(!printQS&&!printQA)
+                            line = solvedSudoku.getSudoku(ClipboardMode.VALUES_ONLY);
+                        else if(printQS)
+                            line = solvedSudoku.getSudoku(ClipboardMode.STEP_SS_ARG);
+                        else
+                            line = "q:"+sudoku.getSudoku(ClipboardMode.CLUES_ONLY)+"\r\na:"+sb.toString();
                         //System.out.println("line: " + line);
                     }
                 }
-                String out = line + " #" + count;
+                String out = line + " #" + count;                
                 if (!findAllSteps) {
                     out += " " + solver.getLevel().getName() + " (" + solver.getScore() + ")"
                             + guess + template + giveUp;
                     results[solver.getLevel().getOrdinal()]++;
                 }
+                if(printQA)
+                    out=line+GeneratorUtil.Spliter+solver.getLevel().getName()+GeneratorUtil.Spliter+solver.getScore();
+                            //+ guess +GeneratorUtil.Spliter+ template +GeneratorUtil.Spliter+ giveUp+GeneratorUtil.Spliter;
+                else if(printQS)
+                    out=line+solver.getLevel().getName()+GeneratorUtil.Spliter+solver.getScore();
+                            //+ guess +GeneratorUtil.Spliter+ template +GeneratorUtil.Spliter+ giveUp+GeneratorUtil.Spliter;
                 if (outFile != null) {
                     outFile.println(out);
                 } else {

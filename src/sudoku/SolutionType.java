@@ -525,8 +525,9 @@ public enum SolutionType {
     }
     
     public String getStepCode() {
-        return libraryType+","+argName+":";
-    }
+        //return libraryType+","+argName+":";
+        return argName+":";
+    }        
 
     public void setStepName(String stepName) {
         this.stepName = stepName;

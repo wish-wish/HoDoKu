@@ -328,7 +328,7 @@ public class MainFrame extends javax.swing.JFrame implements FlavorListener {
         sudokuPanel.setCellZoomPanel(cellZoomPanel);
         cellZoomPanel.setSudokuPanel(sudokuPanel);
         outerSplitPane.setLeftComponent(splitPanel);
-        splitPanel.setSplitPane(sudokuPanel, null);
+        splitPanel.setSplitPane(sudokuPanel, null);        
 
         tabPane.addTab(java.util.ResourceBundle.getBundle("intl/MainFrame").getString("MainFrame.summary"), summaryPanel);
         tabPane.addTab(java.util.ResourceBundle.getBundle("intl/MainFrame").getString("MainFrame.solution_path"), solutionPanel);
@@ -482,6 +482,8 @@ public class MainFrame extends javax.swing.JFrame implements FlavorListener {
 
         // Start background creation
         BackgroundGeneratorThread.getInstance().startCreation();
+        
+        setSplitPane(solutionPanel);
 
 //        Color bg = UIManager.getColor("List.selectionBackground");
 //        System.out.println("List.selectionBackground = " + bg);
@@ -591,9 +593,12 @@ public class MainFrame extends javax.swing.JFrame implements FlavorListener {
         jSeparator33 = new javax.swing.JPopupMenu.Separator();
         configMenuItem = new javax.swing.JMenuItem();
         jSeparator3 = new javax.swing.JPopupMenu.Separator();
-        copyStepsMenuItem = new javax.swing.JMenuItem();
-        copyStepsMenuItem1 = new javax.swing.JMenuItem();
-        copyStepsMenuItem2 = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
+        jMenuItem5 = new javax.swing.JMenuItem();
+        jMenuItem4 = new javax.swing.JMenuItem();
+        jMenuItem6 = new javax.swing.JMenuItem();
         modeMenu = new javax.swing.JMenu();
         playingMenuItem = new javax.swing.JRadioButtonMenuItem();
         learningMenuItem = new javax.swing.JRadioButtonMenuItem();
@@ -1397,32 +1402,57 @@ public class MainFrame extends javax.swing.JFrame implements FlavorListener {
         bearbeitenMenu.add(configMenuItem);
         bearbeitenMenu.add(jSeparator3);
 
-        copyStepsMenuItem.setText(bundle.getString("MainFrame.copyStepsMenuItem.text")); // NOI18N
-        copyStepsMenuItem.setToolTipText(bundle.getString("MainFrame.copyStepsMenuItem.toolTipText")); // NOI18N
-        copyStepsMenuItem.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItem1.setText(bundle.getString("MainFrame.jMenuItem1.text")); // NOI18N
+        jMenuItem1.setActionCommand(bundle.getString("MainFrame.jMenuItem1.actionCommand")); // NOI18N
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                copyStepsMenuItemActionPerformed(evt);
+                jMenuItem1ActionPerformed(evt);
             }
         });
-        bearbeitenMenu.add(copyStepsMenuItem);
+        bearbeitenMenu.add(jMenuItem1);
 
-        copyStepsMenuItem1.setText(bundle.getString("MainFrame.copyStepsMenuItem1.text")); // NOI18N
-        copyStepsMenuItem1.setToolTipText(bundle.getString("MainFrame.copyStepsMenuItem1.toolTipText")); // NOI18N
-        copyStepsMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItem2.setText(bundle.getString("MainFrame.jMenuItem2.text")); // NOI18N
+        jMenuItem2.setToolTipText(bundle.getString("MainFrame.jMenuItem2.toolTipText")); // NOI18N
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                copyStepsMenuItem1ActionPerformed(evt);
+                jMenuItem2ActionPerformed(evt);
             }
         });
-        bearbeitenMenu.add(copyStepsMenuItem1);
+        bearbeitenMenu.add(jMenuItem2);
 
-        copyStepsMenuItem2.setText(bundle.getString("MainFrame.copyStepsMenuItem2.text")); // NOI18N
-        copyStepsMenuItem2.setToolTipText(bundle.getString("MainFrame.copyStepsMenuItem2.toolTipText")); // NOI18N
-        copyStepsMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItem3.setText(bundle.getString("MainFrame.jMenuItem3.text")); // NOI18N
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                copyStepsMenuItem2ActionPerformed(evt);
+                jMenuItem3ActionPerformed(evt);
             }
         });
-        bearbeitenMenu.add(copyStepsMenuItem2);
+        bearbeitenMenu.add(jMenuItem3);
+
+        jMenuItem5.setText(bundle.getString("MainFrame.jMenuItem5.text")); // NOI18N
+        jMenuItem5.setToolTipText(bundle.getString("MainFrame.jMenuItem5.toolTipText")); // NOI18N
+        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem5ActionPerformed(evt);
+            }
+        });
+        bearbeitenMenu.add(jMenuItem5);
+
+        jMenuItem4.setText(bundle.getString("MainFrame.jMenuItem4.text")); // NOI18N
+        jMenuItem4.setToolTipText(bundle.getString("MainFrame.jMenuItem4.toolTipText")); // NOI18N
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem4ActionPerformed(evt);
+            }
+        });
+        bearbeitenMenu.add(jMenuItem4);
+
+        jMenuItem6.setText(bundle.getString("MainFrame.jMenuItem6.text")); // NOI18N
+        jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem6ActionPerformed(evt);
+            }
+        });
+        bearbeitenMenu.add(jMenuItem6);
 
         jMenuBar1.add(bearbeitenMenu);
 
@@ -2659,20 +2689,32 @@ private void extendedPrintMenuItemActionPerformed(java.awt.event.ActionEvent evt
         MyBrowserLauncher.getInstance().launchTracker();
     }//GEN-LAST:event_reportErrorMenuItemActionPerformed
 
-    private void copyStepsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_copyStepsMenuItemActionPerformed
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         SolutionStep activeStep = sudokuPanel.getStep();     
         if(activeStep!=null)
             System.out.print(activeStep.toString());
         copyToClipboard(ClipboardMode.STEPS, false);
-    }//GEN-LAST:event_copyStepsMenuItemActionPerformed
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
 
-    private void copyStepsMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_copyStepsMenuItem1ActionPerformed
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         copyToClipboard(ClipboardMode.STEP_SHORT, false);
-    }//GEN-LAST:event_copyStepsMenuItem1ActionPerformed
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
 
-    private void copyStepsMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_copyStepsMenuItem2ActionPerformed
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
         copyToClipboard(ClipboardMode.STEP_SHORT_SHORT,false);
-    }//GEN-LAST:event_copyStepsMenuItem2ActionPerformed
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
+
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+        copyToClipboard(ClipboardMode.STEP_SS_UPS,false);
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
+
+    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+        copyToClipboard(ClipboardMode.STEP_SS_ARG,false);
+    }//GEN-LAST:event_jMenuItem5ActionPerformed
+
+    private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
+        copyToClipboard(ClipboardMode.STEP_SS_ARG_UPS,false);
+    }//GEN-LAST:event_jMenuItem6ActionPerformed
 
     /**
      * Adjusts icons for hint toggle buttons according to the mode (normal/ColorKu) and according
@@ -4104,9 +4146,6 @@ private void extendedPrintMenuItemActionPerformed(java.awt.event.ActionEvent evt
     private javax.swing.JMenuItem copyPmGridMenuItem;
     private javax.swing.JMenuItem copyPmGridWithStepMenuItem;
     private javax.swing.JMenuItem copySSMenuItem;
-    private javax.swing.JMenuItem copyStepsMenuItem;
-    private javax.swing.JMenuItem copyStepsMenuItem1;
-    private javax.swing.JMenuItem copyStepsMenuItem2;
     private javax.swing.JMenuItem createSavePointMenuItem;
     private javax.swing.JMenu dateiMenu;
     private javax.swing.JMenuItem druckenMenuItem;
@@ -4129,6 +4168,12 @@ private void extendedPrintMenuItemActionPerformed(java.awt.event.ActionEvent evt
     private javax.swing.JTextArea hinweisTextArea;
     private javax.swing.JMenuItem historyMenuItem;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItem5;
+    private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;

@@ -1,0 +1,11 @@
+Change log
+==========
+
+Version 2.3.1(2020-09-20)
+
+Features added:
+ --1、Copy Solution Steps
+---2、Add batch option , /qs , /lang, /qa
+---3、move all from /sudoku to the /form
+---4、Process all 17 clues
+ 	

@@ -351,6 +351,7 @@ public class SudokuGenerator {
      */
     public Sudoku2 generateSudoku(boolean symmetric, boolean[] pattern) {
         generateFullGrid();
+        GeneratorUtil.SetFullAns(newFullSudoku);
         if (pattern == null) {
             generateInitPos(symmetric);
         } else {
@@ -430,7 +431,7 @@ public class SudokuGenerator {
         stack[0].sudoku.set(EMPTY_GRID);
         int level = 0;
         stack[0].index = -1;
-        while (true) {
+        while (true) {            
             // get the next unsolved cell according to generateIndices
             if (stack[level].sudoku.getUnsolvedCellsAnz() == 0) {
                 // generation is complete

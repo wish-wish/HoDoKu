@@ -18,6 +18,7 @@
  */
 package sudoku;
 
+import generator.GeneratorUtil;
 import generator.SudokuGenerator;
 import generator.SudokuGeneratorFactory;
 import java.io.ObjectInputStream;
@@ -169,7 +170,7 @@ public class Sudoku2 implements Cloneable {
     /** Mask for "all digits set" */
     public static final short MAX_MASK = 0x01ff;//511
     /** for each of the 256 possible bit combinations the matching array (for iteration) */
-    public static final int[][] POSSIBLE_VALUES = new int[0x200][];//512
+    public static final int[][] POSSIBLE_VALUES = new int[0x200][];//512   //combi count of 9
     /** The length of the array in {@link #POSSIBLE_VALUES} for each bit combination. */
     public static final int[] ANZ_VALUES = new int[0x200];//512
     /** The indices of the constraints for every cell (LINE, COL, BLOCK) */
@@ -193,22 +194,26 @@ public class Sudoku2 implements Cloneable {
     public static long[][] groupedBuddiesM1 = new long[11][256];
     /** The high order long from {@link #groupedBuddies} */
     public static long[][] groupedBuddiesM2 = new long[11][256];
+    
     /** One bitmap with all cells of each line */
     public static SudokuSet[] LINE_TEMPLATES = new SudokuSet[LINES.length];//81
     /** One bitmap with all cells of each column */
     public static SudokuSet[] COL_TEMPLATES = new SudokuSet[COLS.length];//81
     /** One bitmap with all cells of each block */
     public static SudokuSet[] BLOCK_TEMPLATES = new SudokuSet[BLOCKS.length];//81
+   
     /** One bitmap with all cells of each line and each block */
     public static SudokuSet[] LINE_BLOCK_TEMPLATES = new SudokuSet[LINE_BLOCK_UNITS.length];//18
     /** One bitmap with all cells of each column and each block */
     public static SudokuSet[] COL_BLOCK_TEMPLATES = new SudokuSet[COL_BLOCK_UNITS.length];//18
     /** One bitmap with all cells of each constraint */
+    
     public static SudokuSet[] ALL_CONSTRAINTS_TEMPLATES = new SudokuSet[ALL_UNITS.length];//27
     /** The low order long from {@link #ALL_CONSTRAINTS_TEMPLATES} */
     public static long[] ALL_CONSTRAINTS_TEMPLATES_M1 = new long[ALL_UNITS.length];//27
     /** The high order long from {@link #ALL_CONSTRAINTS_TEMPLATES} */
     public static long[] ALL_CONSTRAINTS_TEMPLATES_M2 = new long[ALL_UNITS.length];//27
+    
     // The data of a Sudoku
     /** Candidate bitmaps for all cells. 0 stands for "cell already set". */
     private short[] cells = new short[LENGTH];
@@ -237,7 +242,8 @@ public class Sudoku2 implements Cloneable {
     private SudokuStatus status = SudokuStatus.EMPTY;
     /** the state of the sudoku if only the givens are taken into account */
     private SudokuStatus statusGivens = SudokuStatus.EMPTY;
-    // Queues for detecting Singles: Naked Singles and Hidden Singles become obvious
+    
+	// Queues for detecting Singles: Naked Singles and Hidden Singles become obvious
     // while setting/deleting candidates; two synchronized arrays contain index/value pairs
     /** A queue for newly detected Naked Singles */
     private SudokuSinglesQueue nsQueue = new SudokuSinglesQueue();
@@ -268,10 +274,10 @@ public class Sudoku2 implements Cloneable {
         POSSIBLE_VALUES[0] = new int[0];
         ANZ_VALUES[0] = 0;
         int[] temp = new int[9];
-        for (int i = 1; i <= 0x1ff; i++) {
+        for (int i = 1; i <= MAX_MASK; i++) {
             int index = 0;
             int mask = 1;
-            for (int j = 1; j <= 0x1ff; j++) {
+            for (int j = 1; j <= MAX_MASK; j++) {
                 if ((i & mask) != 0) {
                     temp[index++] = j;
                 }
@@ -311,7 +317,10 @@ public class Sudoku2 implements Cloneable {
             while ((i & MASKS[++j]) == 0);
             CAND_FROM_MASK[i] = j;
         }
+        GeneratorUtil.combie(index);
     }
+    
+    
 
     /** Creates a new instance of Sudoku2.<br>
      *  All bitmaps are initialized with all bits set (in every cell every
@@ -1205,60 +1214,13 @@ public class Sudoku2 implements Cloneable {
                 }
             }
         }
-        if(mode == ClipboardMode.STEPS)
-        {
-            SudokuSolver solver=SudokuSolverFactory.getDefaultSolverInstance();
-            List<SolutionStep> steps=solver.getSteps();
-            for(int i=0;i<steps.size();i++)
-            {
-                SolutionStep sp=steps.get(i);
-                String str=sp.toString_exp(2);
-                String[] as=str.split("=>");
-                if(as.length==1)
-                {
-                    as=str.split(":");                    
-                }
-                out2.append(as[as.length-1].trim()+",");
-                out.append(str+"\r\n");
-            }
-            //out.append(out2.toString());
-        }
-        if(mode==ClipboardMode.STEP_SHORT)
-        {
-            SudokuSolver solver=SudokuSolverFactory.getDefaultSolverInstance();
-            List<SolutionStep> steps=solver.getSteps();
-            for(int i=0;i<steps.size();i++)
-            {
-                SolutionStep sp=steps.get(i);
-                String str=sp.toString_exp(2);
-                String[] as=str.split("=>");
-                if(as.length==1)
-                {
-                    as=str.split(":");                    
-                }
-                out2.append(as[as.length-1].trim()+";");
-            }
-            out.append(out2.toString().replaceAll(" ",""));
-        }
-        if(mode==ClipboardMode.STEP_SHORT_SHORT)
-        {
-            SudokuSolver solver=SudokuSolverFactory.getDefaultSolverInstance();
-            List<SolutionStep> steps=solver.getSteps();
-            for(int i=0;i<steps.size();i++)
-            {
-                SolutionStep sp=steps.get(i);
-                String str=sp.toString_exp(2);
-                String[] as=str.split("=>");
-                if(as.length==1)
-                {
-                    as=str.split(":");                    
-                }
-                out2.append(as[as.length-1].trim()+"$");
-            }
-            String ss=out2.toString().replaceAll(" ","");
-            String sss=SolutionStep.convertToShort(ss);
-            out.append(sss);
-        }
+        
+        if(mode == ClipboardMode.STEPS||mode==ClipboardMode.STEP_SHORT||mode==ClipboardMode.STEP_SHORT_SHORT
+                ||mode == ClipboardMode.STEP_SS_UPS||mode==ClipboardMode.STEP_SS_ARG||mode==ClipboardMode.STEP_SS_ARG_UPS)
+        {       
+            GeneratorUtil.GetSukodu(this, out, mode);
+        }        
+        
         if (mode == ClipboardMode.PM_GRID || mode == ClipboardMode.PM_GRID_WITH_STEP
                 || mode == ClipboardMode.CLUES_ONLY_FORMATTED || mode == ClipboardMode.VALUES_ONLY_FORMATTED) {
             // new: create one StringBuilder per cell with all candidates/values; add
@@ -2142,12 +2104,14 @@ public class Sudoku2 implements Cloneable {
             }
             LINE_BLOCK_TEMPLATES[i] = LINE_TEMPLATES[i];
             ALL_CONSTRAINTS_TEMPLATES[i] = LINE_TEMPLATES[i];
+            
             COL_TEMPLATES[i] = new SudokuSet();
             for (int j = 0; j < COLS[i].length; j++) {
                 COL_TEMPLATES[i].add(COLS[i][j]);
             }
             COL_BLOCK_TEMPLATES[i] = COL_TEMPLATES[i];
             ALL_CONSTRAINTS_TEMPLATES[i + 9] = COL_TEMPLATES[i];
+            
             BLOCK_TEMPLATES[i] = new SudokuSet();
             for (int j = 0; j < BLOCKS[i].length; j++) {
                 BLOCK_TEMPLATES[i].add(BLOCKS[i][j]);
@@ -2288,7 +2252,7 @@ public class Sudoku2 implements Cloneable {
             long ticks = System.currentTimeMillis();
             ObjectInputStream in = new ObjectInputStream(Sudoku2.class.getResourceAsStream("/templates.dat"));
             templates = (SudokuSetBase[]) in.readObject();
-            System.out.print(templates.length);
+            System.out.print(templates.length+"\r\n");
             in.close();
             ticks = System.currentTimeMillis() - ticks;
             //System.out.println("Templates lesen: " + ticks + "ms");

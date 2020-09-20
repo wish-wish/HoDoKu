@@ -34,4 +34,7 @@ public enum ClipboardMode {
     STEPS,
     STEP_SHORT,
     STEP_SHORT_SHORT,
+    STEP_SS_ARG,//ArgNames
+    STEP_SS_UPS,//UserPuzzleSloveStep
+    STEP_SS_ARG_UPS,//ArgNames && UserPuzzleSloveStep
 }

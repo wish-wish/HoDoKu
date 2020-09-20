@@ -122,13 +122,13 @@ public class TablingSolver extends AbstractSolver {
     /**
      * Maximum recursion depth in buildung the tables.
      */
-    private static final int MAX_REC_DEPTH = 50;
+    private static final int MAX_REC_DEPTH = 512;
     /**
      * Maximum number of indices back to entries, that caused
      * the current entry. If more than MAX_RET_INDICES_PER_ENTRY
      * retIndices arepresent, they are ignored, leading to incomplete chains.
      */
-    private static final int MAX_RET_INDICES_PER_ENTRY = 5;
+    private static final int MAX_RET_INDICES_PER_ENTRY = 36;
     /**
      * A special comparator for comparing chains and nets.
      */
