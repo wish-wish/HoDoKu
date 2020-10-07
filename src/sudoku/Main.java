@@ -1644,7 +1644,7 @@ class BatchSolveThread extends Thread {
                         if(!printQS&&!printQA)
                             line = sudoku.getSudoku(ClipboardMode.VALUES_ONLY);
                         else if(printQS)
-                            line = sudoku.getSudoku(ClipboardMode.STEP_SS_ARG);
+                            line = sudoku.getSudoku(ClipboardMode.STEP_SHORT_SHORT);
                         else      
                         {
                             if(GeneratorUtil.ISPrefix)
@@ -1665,7 +1665,7 @@ class BatchSolveThread extends Thread {
                         if(!printQS&&!printQA)
                             line = solvedSudoku.getSudoku(ClipboardMode.VALUES_ONLY);
                         else if(printQS)
-                            line = solvedSudoku.getSudoku(ClipboardMode.STEP_SS_ARG);
+                            line = solvedSudoku.getSudoku(ClipboardMode.STEP_SHORT_SHORT);
                         else
                         {
                             if(GeneratorUtil.ISPrefix)
@@ -1688,7 +1688,7 @@ class BatchSolveThread extends Thread {
                         out=line+GeneratorUtil.Spliter+solver.getLevel().getOrdinal()+GeneratorUtil.Spliter+solver.getScore();
                                 //+ guess +GeneratorUtil.Spliter+ template +GeneratorUtil.Spliter+ giveUp+GeneratorUtil.Spliter;
                     else if(printQS)
-                        out=line+solver.getLevel().getOrdinal()+GeneratorUtil.Spliter+solver.getScore();
+                        out=line+GeneratorUtil.Spliter+solver.getLevel().getOrdinal()+GeneratorUtil.Spliter+solver.getScore();
                                 //+ guess +GeneratorUtil.Spliter+ template +GeneratorUtil.Spliter+ giveUp+GeneratorUtil.Spliter;                                
                     if (outFile != null) {
                         outFile.print(out+"\n");

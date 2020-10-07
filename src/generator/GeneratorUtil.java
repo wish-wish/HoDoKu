@@ -219,7 +219,8 @@ public class GeneratorUtil {
                     {
                         as=str.split(":");                    
                     }
-                    out2.append(as[as.length-1].trim()+Spliter);
+                    //out2.append(as[as.length-1].trim()+Spliter);
+                    out2.append(as[as.length-1].trim());
                 }
                 String ss=out2.toString().replaceAll(" ","");
                 String sss=GeneratorUtil.convertToShort(ss);
@@ -250,7 +251,7 @@ public class GeneratorUtil {
                         str += "" + values.get(0);
                     }else
                     {
-                        str+=getCellPrint(index, false) + "=" + values.get(0);
+                        str+=step.getCellPrint(index, false) + "=" + values.get(0);
                     }                
                     break;
                 case HIDDEN_QUADRUPLE:
@@ -290,7 +291,7 @@ public class GeneratorUtil {
                         //tmp.append(java.util.ResourceBundle.getBundle("intl/SolutionStep").getString("SolutionStep.in"));                    
                         //tmp.append(" ");
                         tmp.append(" in ");
-                        tmp.append(getCompactCellPrint(indices));
+                        tmp.append(step.getCompactCellPrint(indices));
                         step.getCandidatesToDelete(tmp);
                     }
                     str = tmp.toString();
@@ -349,9 +350,9 @@ public class GeneratorUtil {
                                 //+ java.util.ResourceBundle.getBundle("intl/SolutionStep").getString("SolutionStep.in") + " "
                                 +"in "
                                 + step.getEntityShortName() + step.getEntityNumber()
-                                + " (" + getCompactCellPrint(indices, 0, 1);
+                                + " (" + step.getCompactCellPrint(indices, 0, 1);
                         if (type == SolutionType.DUAL_EMPTY_RECTANGLE) {
-                            str += "/" + getCompactCellPrint(indices, 2, 3);
+                            str += "/" + step.getCompactCellPrint(indices, 2, 3);
                         }
                         str += ")";
                         tmp = new StringBuffer(str);
@@ -369,7 +370,7 @@ public class GeneratorUtil {
                         //tmp.append(java.util.ResourceBundle.getBundle("intl/SolutionStep").getString("SolutionStep.in"));
                         tmp.append(" in");
                         tmp.append(" ");
-                        tmp.append(getCompactCellPrint(indices, 0, 1));
+                        tmp.append(step.getCompactCellPrint(indices, 0, 1));
                         //tmp.append(" ");
                         //tmp.append(java.util.ResourceBundle.getBundle("intl/SolutionStep").getString("SolutionStep.connected_by"));
                         tmp.append(" cb");
@@ -393,7 +394,7 @@ public class GeneratorUtil {
                         str += "/" + values.get(2) 
                                 //+ " " + java.util.ResourceBundle.getBundle("intl/SolutionStep").getString("SolutionStep.in") 
                                 +" in"
-                                + " " + getCompactCellPrint(indices);
+                                + " " + step.getCompactCellPrint(indices);
                         tmp = new StringBuffer(str);
                         step.getCandidatesToDelete(tmp);
                         str = tmp.toString();
@@ -431,7 +432,7 @@ public class GeneratorUtil {
                         if (type == SolutionType.REMOTE_PAIR) {
                             str += "" + values.get(0) + "/" + values.get(1);
                         } else {
-                            str += "" +step. getCandidatesToDeleteDigits();
+                            str += "" +step.getCandidatesToDeleteDigits();
                         }
     //                    if (type == SolutionType.REMOTE_PAIR) {
     //                        str += ": " + values.get(0) + "/" + values.get(1);
@@ -495,7 +496,7 @@ public class GeneratorUtil {
                             //str += " Verity";
                         }
                         if (indices.size() > 0) {
-                            str += " => " + getCellPrint(indices.get(0), false) + "=" + values.get(0);
+                            str += " => " + step.getCellPrint(indices.get(0), false) + "=" + values.get(0);
                         } else {
                             tmp = new StringBuffer(str);
                             step.getCandidatesToDelete(tmp);
@@ -519,7 +520,7 @@ public class GeneratorUtil {
                         str += "" + values.get(0) + "/" + values.get(1);
                     }
                     if (art >= 2) {
-                        str += " in " + getCompactCellPrint(indices);
+                        str += " in " + step.getCompactCellPrint(indices);
                         tmp = new StringBuffer(str);
                         step.getCandidatesToDelete(tmp);
                         str = tmp.toString();
@@ -765,7 +766,7 @@ public class GeneratorUtil {
                 case DEATH_BLOSSOM:
                     tmp = new StringBuffer(str + "");
                     if (art >= 1) {
-                        tmp.append(getCellPrint(indices.get(0)));
+                        tmp.append(step.getCellPrint(indices.get(0)));
                         str = tmp.toString();
                     }
                     if (art >= 2) {
@@ -784,7 +785,7 @@ public class GeneratorUtil {
                     }
                     if (art >= 2) {
                         tmp = new StringBuffer(str + "");
-                        tmp.append(getCompactCellPrint(indices)).append("=").append(values.get(0));
+                        tmp.append(step.getCompactCellPrint(indices)).append("=").append(values.get(0));
                         str = tmp.toString();
                     }
                     break;
@@ -804,7 +805,7 @@ public class GeneratorUtil {
                     }
                     if (art >= 2) {
                         tmp = new StringBuffer(str + "");
-                        tmp.append(getCompactCellPrint(indices)).append("=").append(values.get(0));
+                        tmp.append(step.getCompactCellPrint(indices)).append("=").append(values.get(0));
                         str = tmp.toString();
                     }
                     break;
@@ -876,6 +877,9 @@ public class GeneratorUtil {
                 shortCellStr+=cellStr.charAt(i);
             }
         }
+        shortCellStr=shortCellStr.replace("=", "");
+        shortCellStr=shortCellStr.replace("<>", "!");
+        shortCellStr=shortCellStr.replace(",", "");
         return shortCellStr;
     }
     
