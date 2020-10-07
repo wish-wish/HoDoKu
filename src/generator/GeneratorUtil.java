@@ -106,8 +106,11 @@ public class GeneratorUtil {
     }
     
     public static String EmptyChar=".";
+    public static boolean ISPrefix=false;
     public static String PuzzlePrefix="q:";
     public static String SsSPrefix="s:";
+    public static String AnsPrefix="a:";
+    
     public static int MinStartNum=17;
     public static int MaxStartNum=18;
     public static String Spliter=".";
@@ -129,7 +132,8 @@ public class GeneratorUtil {
     }
     public static void GetSukodu(Sudoku2 sk,StringBuilder out,ClipboardMode mode)
     {
-        out.append(PuzzlePrefix);
+        if(ISPrefix)
+            out.append(PuzzlePrefix);
         if (mode == ClipboardMode.STEPS||mode==ClipboardMode.STEP_SHORT||mode==ClipboardMode.STEP_SHORT_SHORT||mode==ClipboardMode.STEP_SS_ARG)
         {
             for (int i = 0; i < sk.LENGTH; i++)              
@@ -146,7 +150,10 @@ public class GeneratorUtil {
                 else
                     out.append(Integer.toString(sk.getValue(i)));
         }            
-        out.append("\r\n"+SsSPrefix+GeneratorUtil.Steps.getSolutionSteps(mode));
+        if(ISPrefix)
+            out.append("\n"+SsSPrefix+GeneratorUtil.Steps.getSolutionSteps(mode));
+        else
+            out.append("\n"+GeneratorUtil.Steps.getSolutionSteps(mode));
     }
     
     public static class Steps{                               
@@ -827,6 +834,7 @@ public class GeneratorUtil {
     
     private static String idx1 = "@ABCDEFGHIJKLMNOPQRSTUVWXYZ#";
     private static String idx2 ="$123456789abcdefghijklmnop&";
+    private static String str="万亿兆京垓秭穰沟涧正载极";
     
     public static String getCellShortStr(int index)
     {
@@ -888,8 +896,7 @@ public class GeneratorUtil {
     }
     
     public static String diamond(long value)
-    {
-        String str="万亿兆京垓秭穰沟涧正载极";
+    {        
         //TODO:convert 
         return str;
     }

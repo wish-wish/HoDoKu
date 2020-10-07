@@ -1645,8 +1645,17 @@ class BatchSolveThread extends Thread {
                             line = sudoku.getSudoku(ClipboardMode.VALUES_ONLY);
                         else if(printQS)
                             line = sudoku.getSudoku(ClipboardMode.STEP_SS_ARG);
-                        else                            
-                            line = "q:"+sudoku.getSudoku(ClipboardMode.CLUES_ONLY)+"\r\na:"+sb.toString();
+                        else      
+                        {
+                            if(GeneratorUtil.ISPrefix)
+                            {
+                                line = "q:"+sudoku.getSudoku(ClipboardMode.CLUES_ONLY)+"\na:"+sb.toString();
+                            }
+                            else
+                            {
+                                line = ""+sudoku.getSudoku(ClipboardMode.CLUES_ONLY)+"\n"+sb.toString();
+                            }                            
+                        }
                         
                     } else {
                         //System.out.println("Sudoku2: " + sudoku.getSudoku(ClipboardMode.PM_GRID));
@@ -1658,7 +1667,12 @@ class BatchSolveThread extends Thread {
                         else if(printQS)
                             line = solvedSudoku.getSudoku(ClipboardMode.STEP_SS_ARG);
                         else
-                            line = "q:"+sudoku.getSudoku(ClipboardMode.CLUES_ONLY)+"\r\na:"+sb.toString();
+                        {
+                            if(GeneratorUtil.ISPrefix)
+                                line = "q:"+sudoku.getSudoku(ClipboardMode.CLUES_ONLY)+"\na:"+sb.toString();
+                            else
+                                line = ""+sudoku.getSudoku(ClipboardMode.CLUES_ONLY)+"\n"+sb.toString();
+                        }
                         //System.out.println("line: " + line);
                     }
                 }
@@ -1668,17 +1682,28 @@ class BatchSolveThread extends Thread {
                             + guess + template + giveUp;
                     results[solver.getLevel().getOrdinal()]++;
                 }
-                if(printQA)
-                    out=line+GeneratorUtil.Spliter+solver.getLevel().getName()+GeneratorUtil.Spliter+solver.getScore();
-                            //+ guess +GeneratorUtil.Spliter+ template +GeneratorUtil.Spliter+ giveUp+GeneratorUtil.Spliter;
-                else if(printQS)
-                    out=line+solver.getLevel().getName()+GeneratorUtil.Spliter+solver.getScore();
-                            //+ guess +GeneratorUtil.Spliter+ template +GeneratorUtil.Spliter+ giveUp+GeneratorUtil.Spliter;
-                if (outFile != null) {
-                    outFile.println(out);
-                } else {
-                    System.out.println(out);
+                if(printQA||printQS)
+                {                    
+                    if(printQA)
+                        out=line+GeneratorUtil.Spliter+solver.getLevel().getOrdinal()+GeneratorUtil.Spliter+solver.getScore();
+                                //+ guess +GeneratorUtil.Spliter+ template +GeneratorUtil.Spliter+ giveUp+GeneratorUtil.Spliter;
+                    else if(printQS)
+                        out=line+solver.getLevel().getOrdinal()+GeneratorUtil.Spliter+solver.getScore();
+                                //+ guess +GeneratorUtil.Spliter+ template +GeneratorUtil.Spliter+ giveUp+GeneratorUtil.Spliter;                                
+                    if (outFile != null) {
+                        outFile.print(out+"\n");
+                    } else {
+                        System.out.println(out+"\n");
+                    }
                 }
+                else
+                {
+                    if (outFile != null) {
+                       outFile.println(out);
+                   } else {
+                       System.out.println(out);
+                   }   
+                }                
 
                 if (printSolutionPath || findAllSteps || printStatistic || bruteForceTest) {
                     steps = new ArrayList<SolutionStep>(steps);
