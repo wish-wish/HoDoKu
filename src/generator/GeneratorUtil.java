@@ -880,6 +880,8 @@ public class GeneratorUtil {
         shortCellStr=shortCellStr.replace("=", "");
         shortCellStr=shortCellStr.replace("<>", "!");
         shortCellStr=shortCellStr.replace(",", "");
+        shortCellStr=shortCellStr.replace("(", "");
+        shortCellStr=shortCellStr.replace(")", "");
         return shortCellStr;
     }
     

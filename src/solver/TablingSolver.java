@@ -4176,16 +4176,6 @@ public class TablingSolver extends AbstractSolver {
         }
         System.out.println("Tables: " + onAnz + " onTableEntries, " + offAnz + " offTableEntries, "
                 + entryAnz + " Implikationen (" + maxEntryAnz + " max)");
-
-
-
-
-
-
-
-
-
-
     }
 
     /**
