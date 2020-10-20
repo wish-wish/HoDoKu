@@ -22,7 +22,7 @@ package form;
 import sudoku.ClipboardMode;
 import sudoku.Options;
 import sudoku.DifficultyType;
-import sudoku.SudokuUtil;
+import utils.SudokuUtil;
 import sudoku.DifficultyLevel;
 import sudoku.Sudoku2;
 import sudoku.GameMode;

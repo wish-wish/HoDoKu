@@ -64,7 +64,7 @@ public class SolutionStep implements Comparable<SolutionStep>, Cloneable, Serial
     private List<Integer> values = new ArrayList<Integer>();
     private List<Integer> indices = new ArrayList<Integer>();
     private List<Candidate> candidatesToDelete = new ArrayList<Candidate>();
-    private List<Candidate> cannibalistic = new ArrayList<Candidate>();
+    private List<Candidate> cannibalistic = new ArrayList<Candidate>();//eat humon flesh
     private List<Candidate> fins = new ArrayList<Candidate>();     // für Finned Fische
     private List<Candidate> endoFins = new ArrayList<Candidate>(); // für Finned Fische
     private List<Entity> baseEntities = new ArrayList<Entity>();   // für Fisch

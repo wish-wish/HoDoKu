@@ -22,10 +22,7 @@ import generator.GeneratorUtil;
 import generator.SudokuGenerator;
 import generator.SudokuGeneratorFactory;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.FileOutputStream;
 import java.util.Arrays;
-import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.logging.Level;
@@ -1218,7 +1215,9 @@ public class Sudoku2 implements Cloneable {
         if(mode == ClipboardMode.STEPS||mode==ClipboardMode.STEP_SHORT||mode==ClipboardMode.STEP_SHORT_SHORT
                 ||mode == ClipboardMode.STEP_SS_UPS||mode==ClipboardMode.STEP_SS_ARG||mode==ClipboardMode.STEP_SS_ARG_UPS)
         {       
+            SudokuSolver slover=SudokuSolverFactory.getDefaultSolverInstance();
             GeneratorUtil.GetSukodu(this, out, mode);
+            out.append(GeneratorUtil.Spliter+slover.getLevel().getOrdinal()+GeneratorUtil.Spliter+slover.getScore());
         }        
         
         if (mode == ClipboardMode.PM_GRID || mode == ClipboardMode.PM_GRID_WITH_STEP

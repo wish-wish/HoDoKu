@@ -41,7 +41,7 @@
  */
 package form;
 
-import sudoku.ColorKuImage;
+import utils.ColorKuImage;
 import sudoku.SudokuSet;
 import sudoku.Options;
 import java.awt.Color;

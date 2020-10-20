@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with HoDoKu. If not, see <http://www.gnu.org/licenses/>.
  */
-package sudoku;
+package utils;
 
 import java.awt.Font;
 import java.awt.Graphics2D;
@@ -38,7 +38,9 @@ import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.plaf.FontUIResource;
 import form.MainFrame;
-
+import sudoku.SolutionStep;
+import sudoku.Options;
+import sudoku.Main;
 
 /**
  *

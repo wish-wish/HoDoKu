@@ -21,8 +21,8 @@ package form;
 
 import sudoku.Options;
 import sudoku.StepConfig;
-import sudoku.CheckNode;
-import sudoku.CheckRenderer;
+import utils.CheckNode;
+import utils.CheckRenderer;
 import generator.BackgroundGeneratorThread;
 import java.awt.Color;
 import java.awt.Component;

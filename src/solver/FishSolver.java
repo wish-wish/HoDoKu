@@ -35,7 +35,7 @@ import sudoku.SolutionType;
 import sudoku.Sudoku2;
 import sudoku.SudokuSet;
 import sudoku.SudokuSetBase;
-import sudoku.SudokuUtil;
+import utils.SudokuUtil;
 import form.FindAllStepsProgressDialog;
 
 /**

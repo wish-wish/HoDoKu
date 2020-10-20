@@ -20,7 +20,7 @@ package form;
 
 import sudoku.Options;
 import sudoku.SolutionStep;
-import sudoku.SudokuUtil;
+import utils.SudokuUtil;
 import sudoku.Sudoku2;
 import sudoku.StepConfig;
 import sudoku.Candidate;

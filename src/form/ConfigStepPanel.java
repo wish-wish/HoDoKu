@@ -20,7 +20,7 @@
 package form;
 
 import sudoku.Options;
-import sudoku.NumbersOnlyDocument;
+import utils.NumbersOnlyDocument;
 
 /**
  *

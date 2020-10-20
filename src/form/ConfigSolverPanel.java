@@ -21,11 +21,11 @@ package form;
 
 import sudoku.StepConfig;
 import sudoku.Options;
-import sudoku.ListDragAndDrop;
-import sudoku.ListDragAndDropChange;
-import sudoku.CheckNode;
-import sudoku.CheckRenderer;
-import sudoku.NumbersOnlyDocument;
+import utils.ListDragAndDrop;
+import utils.ListDragAndDropChange;
+import utils.CheckNode;
+import utils.CheckRenderer;
+import utils.NumbersOnlyDocument;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Component;

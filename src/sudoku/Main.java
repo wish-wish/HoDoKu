@@ -52,6 +52,7 @@ import solver.SudokuSolver;
 import solver.SudokuSolverFactory;
 import form.MainFrame;
 import form.SudokuConsoleFrame;
+import utils.SudokuUtil;
 
 /**
  *
@@ -1683,13 +1684,14 @@ class BatchSolveThread extends Thread {
                     results[solver.getLevel().getOrdinal()]++;
                 }
                 if(printQA||printQS)
-                {                    
-                    if(printQA)
-                        out=line+GeneratorUtil.Spliter+solver.getLevel().getOrdinal()+GeneratorUtil.Spliter+solver.getScore();
-                                //+ guess +GeneratorUtil.Spliter+ template +GeneratorUtil.Spliter+ giveUp+GeneratorUtil.Spliter;
-                    else if(printQS)
-                        out=line+GeneratorUtil.Spliter+solver.getLevel().getOrdinal()+GeneratorUtil.Spliter+solver.getScore();
-                                //+ guess +GeneratorUtil.Spliter+ template +GeneratorUtil.Spliter+ giveUp+GeneratorUtil.Spliter;                                
+                {             
+                    out = line;
+//                    if(printQA)
+//                        out=line+GeneratorUtil.Spliter+solver.getLevel().getOrdinal()+GeneratorUtil.Spliter+solver.getScore();
+//                                //+ guess +GeneratorUtil.Spliter+ template +GeneratorUtil.Spliter+ giveUp+GeneratorUtil.Spliter;
+//                    else if(printQS)
+//                        out=line+GeneratorUtil.Spliter+solver.getLevel().getOrdinal()+GeneratorUtil.Spliter+solver.getScore();
+//                                //+ guess +GeneratorUtil.Spliter+ template +GeneratorUtil.Spliter+ giveUp+GeneratorUtil.Spliter;                                
                     if (outFile != null) {
                         outFile.print(out+"\n");
                     } else {

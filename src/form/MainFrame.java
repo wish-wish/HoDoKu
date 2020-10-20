@@ -20,12 +20,10 @@ package form;
 
 
 import sudoku.SudokuStatus;
-import sudoku.ColorKuImage;
 import sudoku.StepConfig;
 import sudoku.GameMode;
 import sudoku.DifficultyType;
 import sudoku.Options;
-import sudoku.SudokuUtil;
 import sudoku.Sudoku2;
 import sudoku.Main;
 import sudoku.Sudoku;
@@ -33,8 +31,11 @@ import sudoku.SolutionStep;
 import sudoku.ClipboardMode;
 import sudoku.SolutionType;
 import sudoku.DifficultyLevel;
-import sudoku.GuiState;
-import sudoku.MyBrowserLauncher;
+import generator.GeneratorUtil;
+import utils.ColorKuImage;
+import utils.SudokuUtil;
+import utils.GuiState;
+import utils.MyBrowserLauncher;
 import generator.BackgroundGeneratorThread;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -111,7 +112,7 @@ import solver.SudokuSolverFactory;
 public class MainFrame extends javax.swing.JFrame implements FlavorListener {
 
     private static final long serialVersionUID = 1L;
-    public static final String VERSION = "HoDoKu - v2.3.1 beta";
+    public static final String VERSION = "HoDoKu - v2.3.2(20201020)";
 //    public static final String BUILD = "Build 16";
     public static final String BUILD;
     public static final String REV = "$LastChangedRevision$";
@@ -553,6 +554,7 @@ public class MainFrame extends javax.swing.JFrame implements FlavorListener {
         neuerHinweisButton = new javax.swing.JButton();
         hinweisAusfuehrenButton = new javax.swing.JButton();
         solveUpToButton = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
         hinweisAbbrechenButton = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         hinweisTextArea = new javax.swing.JTextArea();
@@ -597,8 +599,9 @@ public class MainFrame extends javax.swing.JFrame implements FlavorListener {
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem5 = new javax.swing.JMenuItem();
-        jMenuItem4 = new javax.swing.JMenuItem();
         jMenuItem6 = new javax.swing.JMenuItem();
+        jSeparator4 = new javax.swing.JPopupMenu.Separator();
+        jMenuItem4 = new javax.swing.JMenuItem();
         modeMenu = new javax.swing.JMenu();
         playingMenuItem = new javax.swing.JRadioButtonMenuItem();
         learningMenuItem = new javax.swing.JRadioButtonMenuItem();
@@ -1079,6 +1082,14 @@ public class MainFrame extends javax.swing.JFrame implements FlavorListener {
             }
         });
 
+        jButton1.setText(bundle.getString("MainFrame.jButton1.text")); // NOI18N
+        jButton1.setToolTipText(bundle.getString("MainFrame.jButton1.toolTipText")); // NOI18N
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         hinweisAbbrechenButton.setMnemonic('a');
         hinweisAbbrechenButton.setText(bundle.getString("MainFrame.hinweisAbbrechenButton.text")); // NOI18N
         hinweisAbbrechenButton.setToolTipText(bundle.getString("MainFrame.hinweisAbbrechenButton.toolTipText")); // NOI18N
@@ -1103,15 +1114,18 @@ public class MainFrame extends javax.swing.JFrame implements FlavorListener {
         hintPanelLayout.setHorizontalGroup(
             hintPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, hintPanelLayout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 476, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(hintPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(neuerHinweisButton)
-                    .addComponent(solveUpToButton))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(hintPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(hinweisAusfuehrenButton)
-                    .addComponent(hinweisAbbrechenButton)))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 448, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(hintPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(hintPanelLayout.createSequentialGroup()
+                        .addGroup(hintPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(neuerHinweisButton)
+                            .addComponent(solveUpToButton))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(hintPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(hinweisAusfuehrenButton)
+                            .addComponent(hinweisAbbrechenButton)))
+                    .addComponent(jButton1)))
         );
 
         hintPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {hinweisAbbrechenButton, hinweisAusfuehrenButton, neuerHinweisButton, solveUpToButton});
@@ -1125,8 +1139,11 @@ public class MainFrame extends javax.swing.JFrame implements FlavorListener {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(hintPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(hinweisAbbrechenButton)
-                    .addComponent(solveUpToButton)))
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 77, Short.MAX_VALUE)
+                    .addComponent(solveUpToButton))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
         );
 
         hintPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {hinweisAbbrechenButton, hinweisAusfuehrenButton, neuerHinweisButton, solveUpToButton});
@@ -1437,6 +1454,15 @@ public class MainFrame extends javax.swing.JFrame implements FlavorListener {
         });
         bearbeitenMenu.add(jMenuItem5);
 
+        jMenuItem6.setText(bundle.getString("MainFrame.jMenuItem6.text")); // NOI18N
+        jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem6ActionPerformed(evt);
+            }
+        });
+        bearbeitenMenu.add(jMenuItem6);
+        bearbeitenMenu.add(jSeparator4);
+
         jMenuItem4.setText(bundle.getString("MainFrame.jMenuItem4.text")); // NOI18N
         jMenuItem4.setToolTipText(bundle.getString("MainFrame.jMenuItem4.toolTipText")); // NOI18N
         jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
@@ -1445,14 +1471,6 @@ public class MainFrame extends javax.swing.JFrame implements FlavorListener {
             }
         });
         bearbeitenMenu.add(jMenuItem4);
-
-        jMenuItem6.setText(bundle.getString("MainFrame.jMenuItem6.text")); // NOI18N
-        jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem6ActionPerformed(evt);
-            }
-        });
-        bearbeitenMenu.add(jMenuItem6);
 
         jMenuBar1.add(bearbeitenMenu);
 
@@ -2715,6 +2733,13 @@ private void extendedPrintMenuItemActionPerformed(java.awt.event.ActionEvent evt
     private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
         copyToClipboard(ClipboardMode.STEP_SS_ARG_UPS,false);
     }//GEN-LAST:event_jMenuItem6ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        String str=GeneratorUtil.Steps.toString(sudokuPanel.getStep(),3);
+        String str1=sudokuPanel.getStep().toString(2);
+        System.out.println(str);
+        System.out.println(str1);
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * Adjusts icons for hint toggle buttons according to the mode (normal/ColorKu) and according
@@ -4167,6 +4192,7 @@ private void extendedPrintMenuItemActionPerformed(java.awt.event.ActionEvent evt
     private javax.swing.JButton hinweisAusfuehrenButton;
     private javax.swing.JTextArea hinweisTextArea;
     private javax.swing.JMenuItem historyMenuItem;
+    private javax.swing.JButton jButton1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
@@ -4200,6 +4226,7 @@ private void extendedPrintMenuItemActionPerformed(java.awt.event.ActionEvent evt
     private javax.swing.JPopupMenu.Separator jSeparator37;
     private javax.swing.JPopupMenu.Separator jSeparator38;
     private javax.swing.JPopupMenu.Separator jSeparator39;
+    private javax.swing.JPopupMenu.Separator jSeparator4;
     private javax.swing.JPopupMenu.Separator jSeparator6;
     private javax.swing.JSeparator jSeparator8;
     private javax.swing.JSeparator jSeparator9;

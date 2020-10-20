@@ -25,7 +25,7 @@ import sudoku.SolutionStep;
 import sudoku.Options;
 import sudoku.Sudoku2;
 import sudoku.DifficultyType;
-import sudoku.GuiState;
+import utils.GuiState;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;

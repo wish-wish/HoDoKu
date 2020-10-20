@@ -28,7 +28,7 @@ import sudoku.SolutionStep;
 import sudoku.SolutionType;
 import sudoku.Sudoku2;
 import sudoku.SudokuSinglesQueue;
-import sudoku.SudokuUtil;
+import utils.SudokuUtil;
 
 /**
  *

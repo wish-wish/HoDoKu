@@ -19,10 +19,10 @@
 
 package form;
 
-import sudoku.SudokuUtil;
+import utils.SudokuUtil;
 import sudoku.DifficultyType;
 import sudoku.Options;
-import sudoku.NumbersOnlyDocument;
+import utils.NumbersOnlyDocument;
 import java.awt.Component;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;

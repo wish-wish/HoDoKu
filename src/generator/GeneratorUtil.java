@@ -18,9 +18,12 @@
  */
 package generator;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import solver.SudokuSolver;
 import solver.SudokuSolverFactory;
+import sudoku.Candidate;
 import sudoku.Chain;
 import sudoku.ClipboardMode;
 import sudoku.Options;
@@ -105,6 +108,9 @@ public class GeneratorUtil {
         };
     }
     
+    public static String eascii=" ¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿ";
+    public static String ascii="!#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
+    public static String all_ascii=ascii+eascii;    
     public static String EmptyChar=".";
     public static boolean ISPrefix=false;
     public static String PuzzlePrefix="q:";
@@ -130,37 +136,56 @@ public class GeneratorUtil {
     {
         return A;
     }
+    
+    public static String GetPuzzleStr(String str)
+    {
+        String rstr=(int)Math.sqrt(str.length())+".";
+        for(int i=0;i<str.length();i++)
+        {
+            if(str.charAt(i)!='0'&&str.charAt(i)!='.')
+            {                
+                rstr+=Steps.GetEIIndice(i)+Steps.GetEIValue(Integer.parseInt(str.charAt(i)+""));                
+            }
+        }
+        return rstr;
+    }
     public static void GetSukodu(Sudoku2 sk,StringBuilder out,ClipboardMode mode)
     {
+        StringBuilder o=new StringBuilder();
         if(ISPrefix)
-            out.append(PuzzlePrefix);
+            o.append(PuzzlePrefix);
         if (mode == ClipboardMode.STEPS||mode==ClipboardMode.STEP_SHORT||mode==ClipboardMode.STEP_SHORT_SHORT||mode==ClipboardMode.STEP_SS_ARG)
         {
             for (int i = 0; i < sk.LENGTH; i++)              
                 if (sk.getValue(i) == 0 || !sk.isFixed(i))
-                    out.append(EmptyChar);                
+                    o.append(EmptyChar);                
                 else               
-                    out.append(Integer.toString(sk.getValue(i)));            
+                    o.append(Integer.toString(sk.getValue(i)));            
         }
         else
         {
             for (int i = 0; i < sk.LENGTH; i++)
                 if(sk.getValue(i) == 0)
-                    out.append(EmptyChar);
+                    o.append(EmptyChar);
                 else
-                    out.append(Integer.toString(sk.getValue(i)));
-        }            
+                    o.append(Integer.toString(sk.getValue(i)));
+        }
+        String str=GetPuzzleStr(o.toString());
+        out.append(str);
         if(ISPrefix)
             out.append("\n"+SsSPrefix+GeneratorUtil.Steps.getSolutionSteps(mode));
         else
             out.append("\n"+GeneratorUtil.Steps.getSolutionSteps(mode));
+        //String astr=GeneratorUtil.Steps.getSolutionSteps(mode);
+        Integer len=str.length();
+        System.out.print(len+":"+out.toString());
     }
     
     public static class Steps{                               
         public static String getStepCode(SolutionType type)
         {
             return type.getArgName()+Spliter;
-        }        
+        }
         public static String getSolutionSteps(ClipboardMode mode)
         {
             StringBuilder out=new StringBuilder();
@@ -214,29 +239,61 @@ public class GeneratorUtil {
                 {
                     SolutionStep sp=steps.get(i);
                     String str=GeneratorUtil.Steps.toString(sp,3);
-                    String[] as=str.split("=>");
-                    if(as.length==1)
-                    {
-                        as=str.split(":");                    
-                    }
-                    //out2.append(as[as.length-1].trim()+Spliter);
-                    out2.append(as[as.length-1].trim());
+                    out2.append(str);
                 }
-                String ss=out2.toString().replaceAll(" ","");
-                String sss=GeneratorUtil.convertToShort(ss);
-                out.append(sss);                                
+                //String ss=out2.toString().replaceAll(" ","");
+                //String sss=GeneratorUtil.convertToShort(ss);
+                out.append(out2.toString());
             }
             return out.toString();
         }
         
-        public static String toString(SolutionStep step,int art) {        
-            SolutionType type=step.getType();            
-            String str = Steps.getStepCode(type);
-            if(art==3)
-            {
-                art=2;
-                str="";
+        public static String GetEIIndice(int idx)
+        {               
+            return ascii.substring(idx,idx+1);
+        }
+        
+        public static String GetEIValue(int idx)
+        {            
+            return ascii.substring(idx,idx+1);
+        }
+        
+        public static void getCandidatesToDelete(SolutionStep step,StringBuffer tmp) {            
+            ArrayList<Candidate> tmpList = (ArrayList<Candidate>) ((ArrayList<Candidate>) step.getCandidatesToDelete()).clone();
+            ArrayList<Integer> candList = new ArrayList<Integer>();
+            ArrayList<String> cands=new ArrayList<String>();
+            StringBuilder debug=new StringBuilder();
+            while (tmpList.size() > 0) {
+                Candidate firstCand = tmpList.remove(0);
+                candList.clear();
+                cands.clear();
+                candList.add(firstCand.getIndex());
+                Integer t=ascii.length()-firstCand.getValue();                
+                String dstr=ascii.substring(firstCand.getIndex(),firstCand.getIndex()+1)+""+ascii.substring(t,t+1)+"";
+                tmp.append(dstr);
+                tmp.append("");
+                debug.append(firstCand.getIndex()+"!"+firstCand.getValue()+":"+t);
+                //System.out.println(firstCand.getValue()+":"+all_ascii.substring(t,t+1));
+                Iterator<Candidate> it = tmpList.iterator();
+                while (it.hasNext()) {
+                    Candidate c1 = it.next();
+                    if (c1.getValue() == firstCand.getValue()) {
+                        candList.add(c1.getIndex());
+                        t=ascii.length()-firstCand.getValue();
+                        //System.out.println(firstCand.getValue()+":"+all_ascii.substring(t,t+1));
+                        dstr=ascii.substring(c1.getIndex(),c1.getIndex()+1)+""+ascii.substring(t,t+1)+"";
+                        tmp.append(dstr);
+                        tmp.append("");
+                        debug.append(c1.getIndex()+"!"+firstCand.getValue()+":"+t);
+                        it.remove();
+                    }
+                }
             }
+        }
+        
+        public static String toString(SolutionStep step,int art) {                        
+            SolutionType type=step.getType();            
+            String str = "";
             int index = 0;
             StringBuffer tmp;            
             List<Integer>  values=step.getValues();
@@ -245,14 +302,8 @@ public class GeneratorUtil {
                 case FULL_HOUSE:
                 case HIDDEN_SINGLE:
                 case NAKED_SINGLE:
-                    index = indices.get(0);                    
-                    if(art==1)
-                    {
-                        str += "" + values.get(0);
-                    }else
-                    {
-                        str+=step.getCellPrint(index, false) + "=" + values.get(0);
-                    }                
+                    index = indices.get(0);                           
+                    str+=Steps.GetEIIndice(index)+Steps.GetEIValue(values.get(0)) ;
                     break;
                 case HIDDEN_QUADRUPLE:
                 case NAKED_QUADRUPLE:
@@ -261,144 +312,41 @@ public class GeneratorUtil {
                 case LOCKED_TRIPLE:
                 case HIDDEN_PAIR:
                 case NAKED_PAIR:
-                case LOCKED_PAIR:
-                    index = indices.get(0);                    
-                    tmp = new StringBuffer(str);
-                    if (art >= 1) {
-                        //tmp.append(": ");
-                        if (type == SolutionType.HIDDEN_PAIR || type == SolutionType.NAKED_PAIR || type == SolutionType.LOCKED_PAIR) {
-                            tmp.append(values.get(0));
-                            tmp.append(",");
-                            tmp.append(values.get(1));
-                        } else if (type == SolutionType.HIDDEN_TRIPLE || type == SolutionType.NAKED_TRIPLE || type == SolutionType.LOCKED_TRIPLE) {
-                            tmp.append(values.get(0));
-                            tmp.append(",");
-                            tmp.append(values.get(1));
-                            tmp.append(",");
-                            tmp.append(values.get(2));
-                        } else if (type == SolutionType.HIDDEN_QUADRUPLE || type == SolutionType.NAKED_QUADRUPLE) {
-                            tmp.append(values.get(0));
-                            tmp.append(",");
-                            tmp.append(values.get(1));
-                            tmp.append(",");
-                            tmp.append(values.get(2));
-                            tmp.append(",");
-                            tmp.append(values.get(3));
-                        }
-                    }
-                    if (art >= 2) {
-                        tmp.append(" ");
-                        //tmp.append(java.util.ResourceBundle.getBundle("intl/SolutionStep").getString("SolutionStep.in"));                    
-                        //tmp.append(" ");
-                        tmp.append(" in ");
-                        tmp.append(step.getCompactCellPrint(indices));
-                        step.getCandidatesToDelete(tmp);
-                    }
+                case LOCKED_PAIR:                                      
+                    tmp = new StringBuffer(str);                    
+                    Steps.getCandidatesToDelete(step, tmp);                                       
                     str = tmp.toString();
                     break;
                 case LOCKED_CANDIDATES:
                 case LOCKED_CANDIDATES_1:
                 case LOCKED_CANDIDATES_2:
-                    if (art >= 1) {
-                        str += ": " + values.get(0);
-                    }
-                    if (art >= 2) {
-                        str += 
-                                " "
-                                //+ java.util.ResourceBundle.getBundle("intl/SolutionStep").getString("SolutionStep.in")
-                                + "in "
-                                //+ " " 
-                                + step.getEntityShortName() + step.getEntityNumber();
-                        tmp = new StringBuffer(str);
-                        step.getCandidatesToDelete(tmp);
-                        str = tmp.toString();
-                    }
+                    tmp = new StringBuffer(str);
+                    Steps.getCandidatesToDelete(step, tmp);
+                    str = tmp.toString();
                     break;
                 case SKYSCRAPER:
                 case TWO_STRING_KITE:
-                case DUAL_TWO_STRING_KITE:
-                    if (art >= 1) {
-                        str += "" + values.get(0);
-                    }
-                    if (art >= 2) {
-                        str += " " + 
-                                //java.util.ResourceBundle.getBundle("intl/SolutionStep").getString("SolutionStep.in") + " "+ 
-                                " in "+
-                                step.getCompactCellPrint(indices, 0, 1);
-                        if (type == SolutionType.DUAL_TWO_STRING_KITE) {
-                            str += "/" + 
-                                    //java.util.ResourceBundle.getBundle("intl/SolutionStep").getString("SolutionStep.in") + " "+ 
-                                    " in "+
-                                    step.getCompactCellPrint(indices, 4, 5);
-                        }
-                        str += " ("
-                                //+ java.util.ResourceBundle.getBundle("intl/SolutionStep").getString("SolutionStep.connected_by") + " "
-                                +" cb "
-                                + step.getCompactCellPrint(indices, 2, 3) + ")";
-                        tmp = new StringBuffer(str);
-                        step.getCandidatesToDelete(tmp);
-                        str = tmp.toString();
-                    }
+                case DUAL_TWO_STRING_KITE:                    
+                    tmp = new StringBuffer(str);
+                    Steps.getCandidatesToDelete(step, tmp);
+                    str = tmp.toString();                    
                     break;
                 case EMPTY_RECTANGLE:
                 case DUAL_EMPTY_RECTANGLE:
-                    if (art >= 1) {
-                        str += "" + values.get(0);
-                    }
-                    if (art >= 2) {
-                        str += " " 
-                                //+ java.util.ResourceBundle.getBundle("intl/SolutionStep").getString("SolutionStep.in") + " "
-                                +"in "
-                                + step.getEntityShortName() + step.getEntityNumber()
-                                + " (" + step.getCompactCellPrint(indices, 0, 1);
-                        if (type == SolutionType.DUAL_EMPTY_RECTANGLE) {
-                            str += "/" + step.getCompactCellPrint(indices, 2, 3);
-                        }
-                        str += ")";
-                        tmp = new StringBuffer(str);
-                        step.getCandidatesToDelete(tmp);
-                        str = tmp.toString();
-                    }
+                    tmp = new StringBuffer(str);
+                    Steps.getCandidatesToDelete(step, tmp);
+                    str = tmp.toString();
                     break;
                 case W_WING:
-                    if (art >= 1) {
-                        str += "" + values.get(0) + "/" + values.get(1);
-                    }
-                    if (art >= 2) {
-                        tmp = new StringBuffer(str);
-                        //tmp.append(" ");
-                        //tmp.append(java.util.ResourceBundle.getBundle("intl/SolutionStep").getString("SolutionStep.in"));
-                        tmp.append(" in");
-                        tmp.append(" ");
-                        tmp.append(step.getCompactCellPrint(indices, 0, 1));
-                        //tmp.append(" ");
-                        //tmp.append(java.util.ResourceBundle.getBundle("intl/SolutionStep").getString("SolutionStep.connected_by"));
-                        tmp.append(" cb");
-                        tmp.append(" ");
-                        tmp.append(values.get(1));
-                        //tmp.append(" ");
-                        //tmp.append(java.util.ResourceBundle.getBundle("intl/SolutionStep").getString("SolutionStep.in"));
-                        tmp.append(" in");
-                        tmp.append(" ");
-                        step.getFinSet(tmp, step.getFins(), false);
-                        step.getCandidatesToDelete(tmp);
-                        str = tmp.toString();
-                    }
+                    tmp = new StringBuffer(str);                        
+                    Steps.getCandidatesToDelete(step, tmp);
+                    str = tmp.toString();
                     break;
                 case XY_WING:
                 case XYZ_WING:
-                    if (art >= 1) {
-                        str += "" + values.get(0) + "/" + values.get(1);
-                    }
-                    if (art >= 2) {
-                        str += "/" + values.get(2) 
-                                //+ " " + java.util.ResourceBundle.getBundle("intl/SolutionStep").getString("SolutionStep.in") 
-                                +" in"
-                                + " " + step.getCompactCellPrint(indices);
-                        tmp = new StringBuffer(str);
-                        step.getCandidatesToDelete(tmp);
-                        str = tmp.toString();
-                    }
+                    tmp = new StringBuffer(str);
+                    Steps.getCandidatesToDelete(step, tmp);
+                    str = tmp.toString();
                     break;
                 case SIMPLE_COLORS:
                 case SIMPLE_COLORS_TRAP:
@@ -406,15 +354,9 @@ public class GeneratorUtil {
                 case MULTI_COLORS:
                 case MULTI_COLORS_1:
                 case MULTI_COLORS_2:
-                    if (art >= 1) {
-                        str += "" + values.get(0);
-                    }
-                    if (art >= 2) {
-                        tmp = new StringBuffer(str);
-                        step.getColorCellPrint(tmp);
-                        step.getCandidatesToDelete(tmp);
-                        str = tmp.toString();
-                    }
+                    tmp = new StringBuffer(str);
+                    Steps.getCandidatesToDelete(step, tmp);
+                    str = tmp.toString();
                     break;
                 case X_CHAIN:
                 case XY_CHAIN:
@@ -428,53 +370,9 @@ public class GeneratorUtil {
                 case GROUPED_DISCONTINUOUS_NICE_LOOP:
                 case AIC:
                 case GROUPED_AIC:
-                    if (art >= 1) {
-                        if (type == SolutionType.REMOTE_PAIR) {
-                            str += "" + values.get(0) + "/" + values.get(1);
-                        } else {
-                            str += "" +step.getCandidatesToDeleteDigits();
-                        }
-    //                    if (type == SolutionType.REMOTE_PAIR) {
-    //                        str += ": " + values.get(0) + "/" + values.get(1);
-    //                    } else if (type == SolutionType.X_CHAIN || type == SolutionType.XY_CHAIN) {
-    //                    //} else if (type == SolutionType.X_CHAIN) {
-    //                        //str += ": " + values.get(0);
-    //                        str += ": " + candidatesToDelete.get(0).value;
-    //                    }
-                    }
-                    if (art >= 2) {
-                        List<Chain> dummy1 = step.getChains();
-                        StringBuffer tmpChain = step.getChainString(dummy1.get(0));
-                        // adjust nice loop notation
-                        if (type == SolutionType.CONTINUOUS_NICE_LOOP || type == SolutionType.GROUPED_CONTINUOUS_NICE_LOOP) {
-                            Chain ch = dummy1.get(0);
-                            int start = ch.getStart();
-                            int cellIndex = ch.getCellIndex(start);
-                            while (ch.getCellIndex(start) == cellIndex) {
-                                start++;
-                            }
-                            int end = ch.getEnd();
-                            cellIndex = ch.getCellIndex(end);
-                            while (ch.getCellIndex(end) == cellIndex) {
-                                end--;
-                            }
-                            end++;
-                            tmpChain.insert(0, ch.getCandidate(end) + "= ");
-                            tmpChain.append(" =").append(ch.getCandidate(start));
-                            //System.out.println(Chain.toString(ch.chain[start]) + "/" + Chain.toString(ch.chain[ch.end]));
-                        }
-                        if (type == SolutionType.AIC || type == SolutionType.GROUPED_AIC || type == SolutionType.XY_CHAIN) {
-                            Chain ch = dummy1.get(0);
-                            //System.out.println(Chain.toString(ch.chain[ch.start]) + "/" + Chain.toString(ch.chain[ch.end]));
-                            tmpChain.insert(0, ch.getCandidate(ch.getStart()) + "- ");
-                            tmpChain.append(" -").append(ch.getCandidate(ch.getEnd()));
-                        }
-                        //str += " " + getChainString(getChains().get(0));
-                        str += " " + tmpChain;
-                        tmp = new StringBuffer(str);
-                        step.getCandidatesToDelete(tmp);
-                        str = tmp.toString();
-                    }
+                    tmp = new StringBuffer(str);                    
+                    Steps.getCandidatesToDelete(step, tmp);
+                    str = tmp.toString();
                     break;
                 case FORCING_CHAIN:
                 case FORCING_CHAIN_CONTRADICTION:
@@ -482,30 +380,9 @@ public class GeneratorUtil {
                 case FORCING_NET:
                 case FORCING_NET_CONTRADICTION:
                 case FORCING_NET_VERITY:
-                    if (art >= 1) {
-                        // Keine dezenten Hinweise bei Forcing Chains...
-                    }
-                    if (art >= 2) {
-                        if (type == SolutionType.FORCING_CHAIN_CONTRADICTION
-                                || type == SolutionType.FORCING_NET_CONTRADICTION) {
-                            str += " " 
-                                    //+ java.util.ResourceBundle.getBundle("intl/SolutionStep").getString("SolutionStep.in") + " " 
-                                    +"in "
-                                    + step.getEntityShortNameNumber();
-                        } else {
-                            //str += " Verity";
-                        }
-                        if (indices.size() > 0) {
-                            str += " => " + step.getCellPrint(indices.get(0), false) + "=" + values.get(0);
-                        } else {
-                            tmp = new StringBuffer(str);
-                            step.getCandidatesToDelete(tmp);
-                            str = tmp.toString();
-                        }
-                        for (int i = 0; i < step.getChains().size(); i++) {
-                            str += "fc  " + step.getForcingChainString(step.getChains().get(i));
-                        }
-                    }
+                    tmp = new StringBuffer(str);
+                    Steps.getCandidatesToDelete(step, tmp);
+                    str = tmp.toString();
                     break;
                 case UNIQUENESS_1:
                 case UNIQUENESS_2:
@@ -516,22 +393,14 @@ public class GeneratorUtil {
                 case HIDDEN_RECTANGLE:
                 case AVOIDABLE_RECTANGLE_1:
                 case AVOIDABLE_RECTANGLE_2:
-                    if (art >= 1) {
-                        str += "" + values.get(0) + "/" + values.get(1);
-                    }
-                    if (art >= 2) {
-                        str += " in " + step.getCompactCellPrint(indices);
-                        tmp = new StringBuffer(str);
-                        step.getCandidatesToDelete(tmp);
-                        str = tmp.toString();
-                    }
+                    tmp = new StringBuffer(str);
+                    Steps.getCandidatesToDelete(step, tmp);
+                    str = tmp.toString();
                     break;
                 case BUG_PLUS_1:
-                    if (art >= 2) {
-                        tmp = new StringBuffer(str);
-                        step.getCandidatesToDelete(tmp);
-                        str = tmp.toString();
-                    }
+                    tmp = new StringBuffer(str);
+                    Steps.getCandidatesToDelete(step, tmp);
+                    str = tmp.toString();
                     break;
                 case X_WING:
                 case SWORDFISH:
@@ -578,251 +447,65 @@ public class GeneratorUtil {
                 case KRAKEN_FISH:
                 case KRAKEN_FISH_TYPE_1:
                 case KRAKEN_FISH_TYPE_2:
-                    tmp = new StringBuffer();
-                    if (step.getIsSiamese()) {
-                        //tmp.append(java.util.ResourceBundle.getBundle("intl/SolutionStep").getString("SolutionStep.siamese")).append(" ");
-                        tmp.append(" ss ");
-                    }
-                    tmp.append(tmp);
-                    if (art >= 1) {
-                        if (type.isKrakenFish()) {
-                            tmp.append(": ");
-                            step.getCandidatesToDelete(tmp);
-                            tmp.append(" ff ").append(step.getSubType().getStepCode());
-                        }
-                        tmp.append(": ").append(values.get(0));
-                    }
-                    if (art >= 2) {
-                        tmp.append(" ");
-                        step.getEntities(tmp, step.getBaseEntities(), true, false);
-                        tmp.append(" ");
-                        step.getEntities(tmp, step.getBaseEntities(), true, true);
-                        //tmp.append(" Positionen: ");
-                        int displayMode = Options.getInstance().getFishDisplayMode();
-                        if (type.isKrakenFish()) {
-                            // no statistics
-                            displayMode = 0;
-                        }
-                        switch (displayMode) {
-                            case 0:
-                                if (step.getFins().size() > 0) {
-                                    tmp.append(" ");
-                                    step.getFins(tmp, false, true);
-                                }
-                                if (step.getEndoFins().size() > 0) {
-                                    tmp.append(" ");
-                                    step.getFins(tmp, true, true);
-                                }
-                                break;
-                            case 1:
-                                step.getFishStatistics(tmp, false);
-                                break;
-                            case 2:
-                                step.getFishStatistics(tmp, true);
-                                break;
-                        }
-                        if (!type.isKrakenFish()) {
-                            step.getCandidatesToDelete(tmp);
-                        }
-                    }
-                    if (type.isKrakenFish()) {
-                        for (int i = 0; i < step.getChains().size(); i++) {
-                            tmp.append(" ff  ").append(step.getChainString(step.getChains().get(i)));
-                        }
-                    }
+                    tmp = new StringBuffer(str);
+                    Steps.getCandidatesToDelete(step, tmp);
                     str = tmp.toString();
                     break;
                 case SUE_DE_COQ:
                     tmp = new StringBuffer(str + "");
-                    if (art >= 1) {
-                        step.getIndexValueSet(tmp);
-                        str = tmp.toString();
-                    }
-                    if (art >= 2) {
-                        tmp.append(" (");
-                        step.getFinSet(tmp, step.getFins());
-                        tmp.append(", ");
-                        step.getFinSet(tmp, step.getEndoFins());
-                        tmp.append(")");
-                        step.getCandidatesToDelete(tmp);
-                        str = tmp.toString();
-                    }
+                    Steps.getCandidatesToDelete(step, tmp);
+                    str = tmp.toString();
                     break;
                 case ALS_XZ:
-                    // Sets A und B stecken in AlsInSolutionStep, X ist eine 2-Elemente lange Chain, alle Z stecken in fins
                     tmp = new StringBuffer(str + "");
-                    if (art >= 1) {
-                        tmp.append("A=");
-                        step.getAls(tmp, 0);
-                        str = tmp.toString();
-                    }
-                    if (art >= 2) {
-                        tmp.append(", B=");
-                        step.getAls(tmp, 1);
-                        tmp.append(", X=");
-                        step.getAlsXorZ(tmp, true);
-                        if (!step.getFins().isEmpty()) {
-                            tmp.append(", Z=");
-                            step.getAlsXorZ(tmp, false);
-                        }
-                        step.getCandidatesToDelete(tmp);
-                        str = tmp.toString();
-                    }
+                    Steps.getCandidatesToDelete(step, tmp);
+                    str = tmp.toString();
                     break;
                 case ALS_XY_WING:
-                    // Sets A, B und C stecken in AlsInSolutionStep, alle Y und Z stecken in endoFins, alle X stecken in fins
-                    if (art == 1) {
-                        tmp = new StringBuffer(str + "");
-                        tmp.append("C=");
-                        step.getAls(tmp, 2);
-                        str = tmp.toString();
-                    }
-                    if (art >= 2) {
-                        tmp = new StringBuffer(str + "");
-                        tmp.append("A=");
-                        step.getAls(tmp, 0);
-                        tmp.append(", B=");
-                        step.getAls(tmp, 1);
-                        tmp.append(", C=");
-                        step.getAls(tmp, 2);
-                        tmp.append(", X,Y=");
-                        step.getAlsXorZ(tmp, true);
-                        tmp.append(", Z=");
-                        step.getAlsXorZ(tmp, false);
-                        step.getCandidatesToDelete(tmp);
-                        str = tmp.toString();
-                    }
+                    tmp = new StringBuffer(str + "");
+                    Steps.getCandidatesToDelete(step, tmp);
+                    str = tmp.toString();                    
                     break;
                 case ALS_XY_CHAIN:
-                    if (step.getRestrictedCommons().isEmpty()) {
-                        // old code -> has to remain for correctly displaying saved files
-                        if (art == 1) {
-                            tmp = new StringBuffer(str + "");
-                            tmp.append(
-                                    //java.util.ResourceBundle.getBundle("intl/SolutionStep").getString("SolutionStep.start")
-                                    " st "
-                            ).append("=");
-                            step.getAls(tmp, 0);
-                            tmp.append(", ").append(
-                                    //java.util.ResourceBundle.getBundle("intl/SolutionStep").getString("SolutionStep.end")
-                                    " ed "
-                            ).append("=");
-                            step.getAls(tmp, step.getAlses().size() - 1);
-                            str = tmp.toString();
-                        }
-                        if (art >= 2) {
-                            tmp = new StringBuffer(str + "");
-                            char alsChar = 'A';
-                            boolean first = true;
-                            for (int i = 0; i < step.getAlses().size(); i++) {
-                                if (first) {
-                                    first = false;
-                                } else {
-                                    tmp.append(", ");
-                                }
-                                tmp.append(alsChar++);
-                                tmp.append("=");
-                                step.getAls(tmp, i);
-                            }
-                            tmp.append(", RCs=");
-                            step.getAlsXorZ(tmp, true);
-                            tmp.append(", X=");
-                            step.getAlsXorZ(tmp, false);
-                            step.getCandidatesToDelete(tmp);
-                            str = tmp.toString();
-                        }
-                    } else {
-                        if (art == 1) {
-                            tmp = new StringBuffer(str + "");
-                            tmp.append(
-                                    //java.util.ResourceBundle.getBundle("intl/SolutionStep").getString("SolutionStep.start")
-                                    " st "
-                            ).append("=");
-                            step.getAls(tmp, 0);
-                            tmp.append(", ").append(
-                                    //java.util.ResourceBundle.getBundle("intl/SolutionStep").getString("SolutionStep.end")
-                                    " ed "
-                            ).append("=");
-                            step.getAls(tmp, step.getAlses().size() - 1);
-                            str = tmp.toString();
-                        }
-                        if (art >= 2) {
-                            tmp = new StringBuffer(str + "");
-                            step.getCandidatesToDeleteDigits(tmp);
-                            tmp.append("- ");
-                            for (int i = 0; i < step.getAlses().size(); i++) {
-                                step.getAls(tmp, i);
-                                if (i < step.getRestrictedCommons().size()) {
-                                    step.getRestrictedCommon(step.getRestrictedCommons().get(i), tmp);
-                                }
-                            }
-                            tmp.append(" -");
-                            step.getCandidatesToDeleteDigits(tmp);
-                            step.getCandidatesToDelete(tmp);
-                            str = tmp.toString();
-                        }
-                    }
+                    tmp = new StringBuffer(str + "");
+                    Steps.getCandidatesToDelete(step, tmp);
+                    str = tmp.toString();
                     break;
                 case DEATH_BLOSSOM:
                     tmp = new StringBuffer(str + "");
-                    if (art >= 1) {
-                        tmp.append(step.getCellPrint(indices.get(0)));
-                        str = tmp.toString();
-                    }
-                    if (art >= 2) {
-                        for (int i = 0; i < step.getAlses().size(); i++) {
-                            tmp.append(", ");
-                            step.getRestrictedCommon(step.getRestrictedCommons().get(i), tmp);
-                            step.getAls(tmp, i);
-                        }
-                        step.getCandidatesToDelete(tmp);
-                        str = tmp.toString();
-                    }
+                    Steps.getCandidatesToDelete(step, tmp);
+                    str = tmp.toString();
                     break;
                 case TEMPLATE_SET:
-                    if (art == 1) {
-                        str += "" + values.get(0);
+                    tmp = new StringBuffer(str + "");
+                    //tmp.append(step.getCompactCellPrint(indices)).append("=").append(values.get(0));
+                    Iterator<Integer> it=indices.iterator();
+                    while (it.hasNext()) {                        
+                        tmp.append(Steps.GetEIIndice(it.next())+Steps.GetEIValue(values.get(0)));
                     }
-                    if (art >= 2) {
-                        tmp = new StringBuffer(str + "");
-                        tmp.append(step.getCompactCellPrint(indices)).append("=").append(values.get(0));
-                        str = tmp.toString();
-                    }
+                    str = tmp.toString();
                     break;
                 case TEMPLATE_DEL:
-                    if (art >= 1) {
-                        // nichts zusätzlich ausgeben
-                    }
-                    if (art >= 2) {
-                        tmp = new StringBuffer(str + "");
-                        step.getCandidatesToDelete(tmp);
-                        str = tmp.toString();
-                    }
+                    tmp = new StringBuffer(str + "");
+                    Steps.getCandidatesToDelete(step, tmp);
+                    str = tmp.toString();
                     break;
                 case BRUTE_FORCE:
-                    if (art == 1) {
-                        str += "" + values.get(0);
+                    tmp = new StringBuffer(str + "");
+                    //tmp.append(step.getCompactCellPrint(indices)).append("=").append(values.get(0));
+                    Iterator<Integer> it1=indices.iterator();
+                    while (it1.hasNext()) {                        
+                        tmp.append(Steps.GetEIIndice(it1.next())+Steps.GetEIValue(values.get(0)));
                     }
-                    if (art >= 2) {
-                        tmp = new StringBuffer(str + "");
-                        tmp.append(step.getCompactCellPrint(indices)).append("=").append(values.get(0));
-                        str = tmp.toString();
-                    }
+                    str = tmp.toString();
                     break;
                 case INCOMPLETE:
-                    str += 
-                            " ics ";
-                            //java.util.ResourceBundle.getBundle("intl/SolutionStep").getString("SolutionStep.incomplete_solution");
+                    str += "";// ics 
                     break;
                 case GIVE_UP:
                     tmp = new StringBuffer();
                     tmp.append(str);
-                    if (art >= 1) {
-                        tmp.append(":").append(
-                                //java.util.ResourceBundle.getBundle("intl/SolutionStep").getString("SolutionStep.dont_know")
-                                " dk "
-                        );
-                    }
+                    tmp.append("");//GiveUp
                     str = tmp.toString();
                     break;
                 default:

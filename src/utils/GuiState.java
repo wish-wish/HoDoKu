@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with HoDoKu. If not, see <http://www.gnu.org/licenses/>.
  */
-package sudoku;
+package utils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -28,6 +28,10 @@ import java.util.logging.Logger;
 import solver.SudokuSolver;
 import form.SudokuPanel;
 import form.SolutionPanel;
+import sudoku.SolutionStep;
+import sudoku.Sudoku2;
+import sudoku.Options;
+import sudoku.StepConfig;
 
 /**
  * Holds the complete GUI state at a given time. The state consists of the

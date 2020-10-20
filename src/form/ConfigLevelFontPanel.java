@@ -20,7 +20,7 @@ package form;
 
 import sudoku.Options;
 import sudoku.DifficultyLevel;
-import sudoku.NumbersOnlyDocument;
+import utils.NumbersOnlyDocument;
 import generator.BackgroundGeneratorThread;
 import java.awt.Color;
 import java.awt.Component;

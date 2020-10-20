@@ -18,9 +18,9 @@
  */
 package form;
 
-import sudoku.SudokuUtil;
+import utils.SudokuUtil;
+import utils.NumbersOnlyDocument;
 import sudoku.Options;
-import sudoku.NumbersOnlyDocument;
 import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;

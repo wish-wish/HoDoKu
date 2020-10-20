@@ -18,7 +18,7 @@
  */
 package form;
 
-import sudoku.GuiState;
+import utils.GuiState;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;

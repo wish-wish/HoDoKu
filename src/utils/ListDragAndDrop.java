@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with HoDoKu. If not, see <http://www.gnu.org/licenses/>.
  */
-package sudoku;
+package utils;
 
 import java.awt.Cursor;
 import java.awt.Point;
@@ -39,6 +39,7 @@ import java.awt.dnd.DropTargetListener;
 import java.io.IOException;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import sudoku.StepConfig;
 
 /**
  *

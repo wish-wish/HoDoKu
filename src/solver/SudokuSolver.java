@@ -29,17 +29,16 @@ import java.util.logging.Logger;
 import sudoku.DifficultyLevel;
 import sudoku.DifficultyType;
 import sudoku.GameMode;
-import sudoku.GuiState;
 import sudoku.Options;
 import sudoku.SolutionCategory;
 import sudoku.SolutionStep;
 import sudoku.SolutionType;
 import sudoku.StepConfig;
 import sudoku.Sudoku2;
-import sudoku.SudokuUtil;
 import form.FindAllStepsProgressDialog;
 import form.SolverProgressDialog;
-
+import utils.GuiState;
+import utils.SudokuUtil;
 /**
  *
  * @author hobiwan
