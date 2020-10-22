@@ -1620,15 +1620,19 @@ class BatchSolveThread extends Thread {
                         unsolvedAnz++;
                     }
                     // only for now: check the solution!                    
+                    boolean Invalid=false;
                     for (int i = 0; i < sudoku.getValues().length; i++) {                        
                         if (sudoku.getValue(i) != sudoku.getSolution(i)) {
-                            System.out.println("Invalid solution: ");
-                            System.out.println("   Sudoku: " + line);
-                            System.out.println("   Solution:      " + Arrays.toString(sudoku.getValues()));
-                            System.out.println("   True Solution: " + Arrays.toString(sudoku.getSolution()));
+                            Invalid=true;
                         }
-                    }
-                    
+                    }                    
+                    if(Invalid)
+                    {
+                        System.out.println("Invalid solution: ");
+                        System.out.println("   Sudoku: " + line);
+                        System.out.println("   Solution:      " + Arrays.toString(sudoku.getValues()));
+                        System.out.println("   True Solution: " + Arrays.toString(sudoku.getSolution()));
+                    }                                        
 //                    System.out.println("solved!");
                 }
                 String guess = needsGuessing ? " " + SolutionType.BRUTE_FORCE.getArgName() : "";

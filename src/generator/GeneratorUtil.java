@@ -139,7 +139,7 @@ public class GeneratorUtil {
     
     public static String GetPuzzleStr(String str)
     {
-        String rstr=(int)Math.sqrt(str.length())+".";
+        String rstr=(int)Math.sqrt(str.length())+"P";
         for(int i=0;i<str.length();i++)
         {
             if(str.charAt(i)!='0'&&str.charAt(i)!='.')
@@ -149,6 +149,35 @@ public class GeneratorUtil {
         }
         return rstr;
     }
+    public static String TOSukoduStr(String str)
+    {
+        
+        String[] ss=str.split("P");
+        String ps=str.replace(ss[0]+"P", "");
+        if(ss[0].length()>0&&ss[0].length()<3)
+        {
+            int  num=Integer.parseInt(ss[0]);
+            int[] puz=new int[num*num];
+            for(int i=0;i<puz.length;i++)
+            {
+                puz[0]=0;
+            }
+            for(int i=0;i<ps.length()/2;i++)
+            {
+                puz[ascii.indexOf(ps.charAt(i*2))]=ascii.indexOf(ps.charAt(i*2+1));
+            }
+            String s="";
+            for(int i=0;i<puz.length;i++)
+            {
+                s+=puz[i]+"";
+            }
+            System.out.println(s);
+            return s;
+        }
+        return "";
+    }
+        
+    
     public static void GetSukodu(Sudoku2 sk,StringBuilder out,ClipboardMode mode)
     {
         StringBuilder o=new StringBuilder();
@@ -305,6 +334,29 @@ public class GeneratorUtil {
                     index = indices.get(0);                           
                     str+=Steps.GetEIIndice(index)+Steps.GetEIValue(values.get(0)) ;
                     break;
+                case BRUTE_FORCE:
+                    tmp = new StringBuffer(str + "");
+                    //tmp.append(step.getCompactCellPrint(indices)).append("=").append(values.get(0));
+                    Iterator<Integer> it1=indices.iterator();
+                    while (it1.hasNext()) {                        
+                        tmp.append(Steps.GetEIIndice(it1.next())+Steps.GetEIValue(values.get(0)));
+                    }
+                    str = tmp.toString();
+                    break;
+                case TEMPLATE_SET:
+                    tmp = new StringBuffer(str + "");
+                    //tmp.append(step.getCompactCellPrint(indices)).append("=").append(values.get(0));
+                    Iterator<Integer> it=indices.iterator();
+                    while (it.hasNext()) {                        
+                        tmp.append(Steps.GetEIIndice(it.next())+Steps.GetEIValue(values.get(0)));
+                    }
+                    str = tmp.toString();
+                    break;
+                case TEMPLATE_DEL:
+                    tmp = new StringBuffer(str + "");
+                    Steps.getCandidatesToDelete(step, tmp);
+                    str = tmp.toString();
+                    break;
                 case HIDDEN_QUADRUPLE:
                 case NAKED_QUADRUPLE:
                 case HIDDEN_TRIPLE:
@@ -408,12 +460,33 @@ public class GeneratorUtil {
                 case SQUIRMBAG:
                 case WHALE:
                 case LEVIATHAN:
+                case MUTANT_X_WING:
+                case MUTANT_SWORDFISH:
+                case MUTANT_JELLYFISH:
+                case MUTANT_SQUIRMBAG:
+                case MUTANT_WHALE:
+                case MUTANT_LEVIATHAN:
+                case KRAKEN_FISH:
+                case KRAKEN_FISH_TYPE_1:
+                case KRAKEN_FISH_TYPE_2:
                 case FINNED_X_WING:
                 case FINNED_SWORDFISH:
                 case FINNED_JELLYFISH:
                 case FINNED_SQUIRMBAG:
                 case FINNED_WHALE:
                 case FINNED_LEVIATHAN:
+                case FINNED_FRANKEN_X_WING:
+                case FINNED_FRANKEN_SWORDFISH:
+                case FINNED_FRANKEN_JELLYFISH:
+                case FINNED_FRANKEN_SQUIRMBAG:
+                case FINNED_FRANKEN_WHALE:
+                case FINNED_FRANKEN_LEVIATHAN:
+                case FINNED_MUTANT_X_WING:
+                case FINNED_MUTANT_SWORDFISH:
+                case FINNED_MUTANT_JELLYFISH:
+                case FINNED_MUTANT_SQUIRMBAG:
+                case FINNED_MUTANT_WHALE:
+                case FINNED_MUTANT_LEVIATHAN:
                 case SASHIMI_X_WING:
                 case SASHIMI_SWORDFISH:
                 case SASHIMI_JELLYFISH:
@@ -426,27 +499,6 @@ public class GeneratorUtil {
                 case FRANKEN_SQUIRMBAG:
                 case FRANKEN_WHALE:
                 case FRANKEN_LEVIATHAN:
-                case FINNED_FRANKEN_X_WING:
-                case FINNED_FRANKEN_SWORDFISH:
-                case FINNED_FRANKEN_JELLYFISH:
-                case FINNED_FRANKEN_SQUIRMBAG:
-                case FINNED_FRANKEN_WHALE:
-                case FINNED_FRANKEN_LEVIATHAN:
-                case MUTANT_X_WING:
-                case MUTANT_SWORDFISH:
-                case MUTANT_JELLYFISH:
-                case MUTANT_SQUIRMBAG:
-                case MUTANT_WHALE:
-                case MUTANT_LEVIATHAN:
-                case FINNED_MUTANT_X_WING:
-                case FINNED_MUTANT_SWORDFISH:
-                case FINNED_MUTANT_JELLYFISH:
-                case FINNED_MUTANT_SQUIRMBAG:
-                case FINNED_MUTANT_WHALE:
-                case FINNED_MUTANT_LEVIATHAN:
-                case KRAKEN_FISH:
-                case KRAKEN_FISH_TYPE_1:
-                case KRAKEN_FISH_TYPE_2:
                     tmp = new StringBuffer(str);
                     Steps.getCandidatesToDelete(step, tmp);
                     str = tmp.toString();
@@ -475,30 +527,7 @@ public class GeneratorUtil {
                     tmp = new StringBuffer(str + "");
                     Steps.getCandidatesToDelete(step, tmp);
                     str = tmp.toString();
-                    break;
-                case TEMPLATE_SET:
-                    tmp = new StringBuffer(str + "");
-                    //tmp.append(step.getCompactCellPrint(indices)).append("=").append(values.get(0));
-                    Iterator<Integer> it=indices.iterator();
-                    while (it.hasNext()) {                        
-                        tmp.append(Steps.GetEIIndice(it.next())+Steps.GetEIValue(values.get(0)));
-                    }
-                    str = tmp.toString();
-                    break;
-                case TEMPLATE_DEL:
-                    tmp = new StringBuffer(str + "");
-                    Steps.getCandidatesToDelete(step, tmp);
-                    str = tmp.toString();
-                    break;
-                case BRUTE_FORCE:
-                    tmp = new StringBuffer(str + "");
-                    //tmp.append(step.getCompactCellPrint(indices)).append("=").append(values.get(0));
-                    Iterator<Integer> it1=indices.iterator();
-                    while (it1.hasNext()) {                        
-                        tmp.append(Steps.GetEIIndice(it1.next())+Steps.GetEIValue(values.get(0)));
-                    }
-                    str = tmp.toString();
-                    break;
+                    break;                
                 case INCOMPLETE:
                     str += "";// ics 
                     break;
@@ -509,7 +538,7 @@ public class GeneratorUtil {
                     str = tmp.toString();
                     break;
                 default:
-                    throw new RuntimeException(java.util.ResourceBundle.getBundle("intl/SolutionStep").getString("SolutionStep.invalid_type") + " (" + type + ")!");
+                    throw new RuntimeException("Invalid(" + type + ")!");
             }
             return str;
         }                

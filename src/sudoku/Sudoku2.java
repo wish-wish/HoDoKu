@@ -557,12 +557,13 @@ public class Sudoku2 implements Cloneable {
 //             | 36      238     2368    | 7       9       1       | 3568    3568    4       |
 //             *-----------------------------------------------------------------------------*
 
+//     9N)#+&5$A'C&E)H*L%Q#S+X%[&^$b'd#m*o(
 
         // Split input in lines, identify border lines (SudoCue uses '.' in borders,
         // gives an error) and erase markup characters
         // a line counts as border line, if it contains at least one occurence of "---"
         String lineEnd = null;
-        int[][] cands = new int[9][9];
+        int[][] cands = new int[UNITS][UNITS];
         if (init.contains("\r\n")) {
             lineEnd = "\r\n";
         } else if (init.contains("\r")) {
@@ -579,9 +580,19 @@ public class Sudoku2 implements Cloneable {
 //                tmpBuffer.append("lines[" + i + "]: " + lines[i] + "\r\n");
 //            }
 //            Logger.getLogger(getClass().getName()).log(Level.FINE, tmpBuffer.toString());
-        } else {
+        } 
+        else 
+        {
             lines = new String[1];
-            lines[0] = init;
+            String sinit=GeneratorUtil.TOSukoduStr(init);
+            if(sinit!="")
+            {
+                lines[0]=sinit;                
+            }
+            else
+            {
+                lines[0] = init;
+            }            
 //            Logger.getLogger(getClass().getName()).log(Level.FINE, "Einzeiler: <" + lines[0] + ">");
         }
         int anzLines = lines.length;
