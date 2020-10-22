@@ -171,7 +171,7 @@ public class GeneratorUtil {
             {
                 s+=puz[i]+"";
             }
-            System.out.println(s);
+            //System.out.println(s);
             return s;
         }
         return "";
